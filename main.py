@@ -86,5 +86,30 @@ def kiem_tra_cong_no_khach_hang(ten_hoac_sdt: str) -> str:
     except Exception as e:
         return f"Lỗi xử lý: {e}"
 
-# Xuất ứng dụng SSE chuẩn
-app = mcp.sse_app()
+# Lấy app SSE từ FastMCP
+mcp_app = mcp.sse_app()
+
+# Bộ lọc tự động chuẩn hóa Header cho đường dẫn /sse
+class FixAcceptHeaderMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            path = scope.get("path", "")
+            if path.endswith("/sse") or path == "/sse":
+                headers = list(scope.get("headers", []))
+                new_headers = []
+                has_accept = False
+                for k, v in headers:
+                    if k.lower() == b"accept":
+                        has_accept = True
+                        new_headers.append((b"accept", b"text/event-stream"))
+                    else:
+                        new_headers.append((k, v))
+                if not has_accept:
+                    new_headers.append((b"accept", b"text/event-stream"))
+                scope["headers"] = new_headers
+        await self.app(scope, receive, send)
+
+app = FixAcceptHeaderMiddleware(mcp_app)
