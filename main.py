@@ -100,7 +100,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Bộ lọc xử lý lượt kiểm tra (POST/HEAD/OPTIONS) từ Spark
+# 3. Phản hồi 200 OK cho Health Check trang chủ (HEAD / GET)
+@app.api_route("/", methods=["GET", "HEAD"])
+async def health_check():
+    return JSONResponse(content={"status": "ok", "message": "KiotViet MCP Server is running"}, status_code=200)
+
+# 4. Bộ lọc xử lý lượt kiểm tra (POST/HEAD/OPTIONS) từ Spark
 @app.middleware("http")
 async def handle_probe_headers(request: Request, call_next):
     path = request.url.path
@@ -119,9 +124,6 @@ async def handle_probe_headers(request: Request, call_next):
 
     return await call_next(request)
 
-# 4. Tích hợp MCP SSE vào ứng dụng FastAPI
+# 5. Tích hợp MCP SSE vào ứng dụng FastAPI
 mcp_sse_app = mcp.sse_app()
-@app.get("/")
-def root():
-    return {"status": "ok", "message": "KiotViet MCP Server is running"}
 app.mount("/", mcp_sse_app)
