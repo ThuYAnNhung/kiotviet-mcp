@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
 
-# 1. Khởi tạo MCP Server với sse_path="/mcp"
+# 1. Khởi tạo MCP Server
 mcp = FastMCP("KiotViet-MCP", sse_path="/mcp", message_path="/messages")
 
 CLIENT_ID = os.getenv("KIOTVIET_CLIENT_ID", "")
@@ -100,21 +100,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Phản hồi 200 OK cho Health Check trang chủ (HEAD / GET)
+# 3. Phản hồi 200 OK cho Health Check và OAuth Check của Spark
 @app.api_route("/", methods=["GET", "HEAD"])
 async def health_check():
     return JSONResponse(content={"status": "ok", "message": "KiotViet MCP Server is running"}, status_code=200)
 
-# 4. Bộ lọc xử lý lượt kiểm tra (POST/HEAD/OPTIONS) từ Spark
+@app.api_route("/.well-known/oauth-protected-resource", methods=["GET", "HEAD"])
+@app.api_route("/.well-known/oauth-protected-resource/mcp", methods=["GET", "HEAD"])
+async def oauth_dummy():
+    return JSONResponse(content={"status": "ok"}, status_code=200)
+
+# 4. Xử lý phản hồi 200 OK cho tất cả lượt kiểm tra (POST/HEAD/OPTIONS) tại /mcp
 @app.middleware("http")
-async def handle_probe_headers(request: Request, call_next):
-    path = request.url.path
+async def handle_mcp_probes(request: Request, call_next):
+    path = request.url.path.rstrip("/")
     method = request.method
     
     if path in ["/mcp", "/sse"]:
-        if method in ["HEAD", "OPTIONS"]:
-            return JSONResponse(content={"status": "ok"}, status_code=200)
-        elif method == "POST":
+        if method in ["HEAD", "OPTIONS", "POST"]:
             accept = request.headers.get("accept", "")
             if "text/event-stream" not in accept:
                 return JSONResponse(
@@ -124,6 +127,6 @@ async def handle_probe_headers(request: Request, call_next):
 
     return await call_next(request)
 
-# 5. Tích hợp MCP SSE vào ứng dụng FastAPI
+# 5. Tích hợp MCP SSE
 mcp_sse_app = mcp.sse_app()
 app.mount("/", mcp_sse_app)
