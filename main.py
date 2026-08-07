@@ -121,4 +121,7 @@ async def handle_probe_headers(request: Request, call_next):
 
 # 4. Tích hợp MCP SSE vào ứng dụng FastAPI
 mcp_sse_app = mcp.sse_app()
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "KiotViet MCP Server is running"}
 app.mount("/", mcp_sse_app)
