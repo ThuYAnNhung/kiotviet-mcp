@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
 
-# 1. Khởi tạo MCP Server
-mcp = FastMCP("KiotViet-MCP")
+# 1. Khởi tạo MCP Server chỉ định chính thức sse_path="/mcp"
+mcp = FastMCP("KiotViet-MCP", sse_path="/mcp", message_path="/messages")
 
 CLIENT_ID = os.getenv("KIOTVIET_CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("KIOTVIET_CLIENT_SECRET", "")
@@ -100,10 +100,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Bộ lọc phản hồi 200 OK cho các lượt kiểm tra URL từ Gemini
+# 3. Phản hồi 200 OK cho các lượt kiểm tra URL từ Gemini/Spark
 @app.middleware("http")
-async def handle_sse_probe_and_headers(request: Request, call_next):
-    if request.url.path == "/sse" and request.method in ["GET", "HEAD"]:
+async def handle_probe_headers(request: Request, call_next):
+    if request.url.path in ["/mcp", "/sse"] and request.method in ["GET", "HEAD"]:
         accept_header = request.headers.get("accept", "")
         if "text/event-stream" not in accept_header:
             return JSONResponse(
