@@ -1,6 +1,6 @@
 import os
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
@@ -89,7 +89,7 @@ def kiem_tra_cong_no_khach_hang(ten_hoac_sdt: str) -> str:
     except Exception as e:
         return f"Lỗi xử lý: {e}"
 
-# 2. Tạo ứng dụng FastAPI chính và mở quyền CORS cho Spark/Gemini
+# 2. Tạo ứng dụng FastAPI chính
 app = FastAPI(title="KiotViet MCP Server")
 
 app.add_middleware(
@@ -100,10 +100,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def root():
-    return JSONResponse({"status": "ok", "message": "KiotViet MCP Server is running"})
+# 3. Bộ lọc phản hồi 200 OK cho các lượt kiểm tra URL từ Gemini
+@app.middleware("http")
+async def handle_sse_probe_and_headers(request: Request, call_next):
+    if request.url.path == "/sse" and request.method in ["GET", "HEAD"]:
+        accept_header = request.headers.get("accept", "")
+        if "text/event-stream" not in accept_header:
+            return JSONResponse(
+                content={"status": "ok", "service": "KiotViet MCP Server", "transport": "sse"},
+                status_code=200
+            )
+    return await call_next(request)
 
-# 3. Tích hợp MCP SSE vào ứng dụng FastAPI
+# 4. Tích hợp MCP SSE vào ứng dụng
 mcp_sse_app = mcp.sse_app()
 app.mount("/", mcp_sse_app)
