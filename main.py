@@ -1,8 +1,11 @@
 import os
 import requests
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
 
-# Khởi tạo MCP Server
+# 1. Khởi tạo MCP Server
 mcp = FastMCP("KiotViet-MCP")
 
 CLIENT_ID = os.getenv("KIOTVIET_CLIENT_ID", "")
@@ -86,30 +89,21 @@ def kiem_tra_cong_no_khach_hang(ten_hoac_sdt: str) -> str:
     except Exception as e:
         return f"Lỗi xử lý: {e}"
 
-# Lấy app SSE từ FastMCP
-mcp_app = mcp.sse_app()
+# 2. Tạo ứng dụng FastAPI chính và mở quyền CORS cho Spark/Gemini
+app = FastAPI(title="KiotViet MCP Server")
 
-# Bộ lọc tự động chuẩn hóa Header cho đường dẫn /sse
-class FixAcceptHeaderMiddleware:
-    def __init__(self, app):
-        self.app = app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    async def __call__(self, scope, receive, send):
-        if scope["type"] == "http":
-            path = scope.get("path", "")
-            if path.endswith("/sse") or path == "/sse":
-                headers = list(scope.get("headers", []))
-                new_headers = []
-                has_accept = False
-                for k, v in headers:
-                    if k.lower() == b"accept":
-                        has_accept = True
-                        new_headers.append((b"accept", b"text/event-stream"))
-                    else:
-                        new_headers.append((k, v))
-                if not has_accept:
-                    new_headers.append((b"accept", b"text/event-stream"))
-                scope["headers"] = new_headers
-        await self.app(scope, receive, send)
+@app.get("/")
+def root():
+    return JSONResponse({"status": "ok", "message": "KiotViet MCP Server is running"})
 
-app = FixAcceptHeaderMiddleware(mcp_app)
+# 3. Tích hợp MCP SSE vào ứng dụng FastAPI
+mcp_sse_app = mcp.sse_app()
+app.mount("/", mcp_sse_app)
