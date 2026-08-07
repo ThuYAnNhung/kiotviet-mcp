@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
 
-# 1. Khởi tạo MCP Server chỉ định chính thức sse_path="/mcp"
+# 1. Khởi tạo MCP Server với sse_path="/mcp"
 mcp = FastMCP("KiotViet-MCP", sse_path="/mcp", message_path="/messages")
 
 CLIENT_ID = os.getenv("KIOTVIET_CLIENT_ID", "")
@@ -100,18 +100,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Phản hồi 200 OK cho các lượt kiểm tra URL từ Gemini/Spark
+# 3. Bộ lọc xử lý lượt kiểm tra (POST/HEAD/OPTIONS) từ Spark
 @app.middleware("http")
 async def handle_probe_headers(request: Request, call_next):
-    if request.url.path in ["/mcp", "/sse"] and request.method in ["GET", "HEAD"]:
-        accept_header = request.headers.get("accept", "")
-        if "text/event-stream" not in accept_header:
-            return JSONResponse(
-                content={"status": "ok", "service": "KiotViet MCP Server", "transport": "sse"},
-                status_code=200
-            )
+    path = request.url.path
+    method = request.method
+    
+    if path in ["/mcp", "/sse"]:
+        if method in ["HEAD", "OPTIONS"]:
+            return JSONResponse(content={"status": "ok"}, status_code=200)
+        elif method == "POST":
+            accept = request.headers.get("accept", "")
+            if "text/event-stream" not in accept:
+                return JSONResponse(
+                    content={"status": "ok", "service": "KiotViet MCP Server", "transport": "sse"},
+                    status_code=200
+                )
+
     return await call_next(request)
 
-# 4. Tích hợp MCP SSE vào ứng dụng
+# 4. Tích hợp MCP SSE vào ứng dụng FastAPI
 mcp_sse_app = mcp.sse_app()
 app.mount("/", mcp_sse_app)
