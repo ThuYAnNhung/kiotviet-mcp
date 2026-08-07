@@ -1,9 +1,13 @@
 import os
 import requests
-from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
 
+# Khởi tạo MCP Server
 mcp = FastMCP("KiotViet-Spark-Bridge")
+
+# Cấu hình Host và Port tự động từ môi trường Render
+mcp.settings.host = "0.0.0.0"
+mcp.settings.port = int(os.getenv("PORT", 8000))
 
 CLIENT_ID = os.getenv("KIOTVIET_CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("KIOTVIET_CLIENT_SECRET", "")
