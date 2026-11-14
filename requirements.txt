@@ -2,3 +2,7 @@ fastapi>=0.110.0
 uvicorn>=0.28.0
 requests>=2.31.0
 mcp>=1.2.0,<2.0.0
+# --- Agent An Nhung ---
+anthropic>=2.8.0
+apscheduler>=3.10,<4
+python-dotenv>=1.0
