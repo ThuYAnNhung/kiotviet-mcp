@@ -1,20 +1,24 @@
-"""Chụp infographic HTML ra ảnh JPG 4K dọc, nét, dung lượng 1,5–1,9 MB (KiotViet giới hạn 2 MB).
+"""Chụp infographic HTML ra ảnh JPG dọc 9:16, chữ nét, không vỡ khi up KiotViet.
 
 Cách dùng:
-    python3 xuat_anh_kiotviet.py <file.html> <ten_san_pham>_<so>-<loai>.jpg
+    python3 xuat_anh_kiotviet.py <file.html> <ten_san_pham>_<so>-<loai>.jpg            # 1080 x 1920 (mặc định)
+    python3 xuat_anh_kiotviet.py <file.html> <ten>.jpg --co 4k                          # 2160 x 3840 (bản cũ)
+
+Anh chốt 17/11 (lần 4): ảnh 4K up lên KiotViet bị KiotViet tự thu nhỏ/nén lại nên chữ vỡ;
+cỡ chuẩn là 1080 x 1920 cho cả 5 ảnh. Bố cục, cỡ chữ giữ nguyên (cùng tỷ lệ).
 
 Làm gì:
 1. Mở HTML bằng Chromium (Playwright), khung bố cục 1536 x 2731 (9:16), chụp ở 2,5x (3840 x 6828)
    để chữ và nét vẽ mịn, không răng cưa.
 2. Kiểm tra mọi ảnh trong trang (logo, ảnh sản phẩm, nền chìm) đã tải đủ;
    thiếu ảnh nào thì báo lỗi và dừng, không xuất ảnh hỏng.
-3. Thu về 4K dọc 2160 x 3840 bằng LANCZOS + làm nét nhẹ (anh chốt 17/11: ảnh 4K, 1,5–1,9 MB).
+3. Thu về 1080 x 1920 (hoặc 2160 x 3840 với --co 4k) bằng LANCZOS + làm nét nhẹ.
    Kiểm tra thêm: còn sót chỗ {{...}} chưa điền; chân trang bị cắt ở mép dưới
    (khung có overflow hidden nên không tự báo); ảnh MXH lỡ chứa hotline/website.
 4. Lưu JPG chroma 4:4:4 (giữ viền chữ màu sắc nét; JPG mặc định 4:2:0 làm nhoè chữ đỏ/xanh),
-   chọn chất lượng CAO NHẤT mà file vẫn ≤ --max-mb (1,9 MB) để up thẳng KiotViet/MXH không cần nén lại.
-   Ảnh quá ít chi tiết mà chất lượng tối đa vẫn dưới --min-mb (1,5 MB) thì giữ chất lượng tối đa
-   (đó đã là bản nét nhất) và in ghi chú.
+   chọn chất lượng CAO NHẤT (tối đa --q-max) mà file vẫn ≤ --max-mb (1,9 MB, KiotViet giới hạn 2 MB).
+   Bản 1080 thường chỉ 0,5–1 MB ở chất lượng 95: nhẹ nên KiotViet không phải nén lại.
+   Bản 4K: chất lượng tối đa vẫn dưới --min-mb (1,5 MB) thì in ghi chú "đã là bản nét nhất".
 5. Tạo thêm bản xem thử như trên điện thoại (rộng 540 px): <ten>_xem-thu-dien-thoai.jpg
    để kiểm tra chữ nhỏ nhất còn đọc được không. Bản này chỉ để kiểm tra, không gửi anh.
 """
@@ -90,14 +94,14 @@ def kiem_qr(jpg):
         print(f"CẢNH BÁO: QR quét ra '{noi_dung}' thay vì {WEBSITE} — kiểm tra lại qr_web.png.")
 
 
-def luu_jpg(im, out, max_mb, min_mb):
-    """Chọn chất lượng JPG cao nhất mà vẫn ≤ max_mb (tìm nhị phân trong 75..100)."""
+def luu_jpg(im, out, max_mb, min_mb, q_max=100):
+    """Chọn chất lượng JPG cao nhất (≤ q_max) mà vẫn ≤ max_mb (tìm nhị phân trong 75..q_max)."""
     def nen(q):
         buf = io.BytesIO()
         im.save(buf, "JPEG", quality=q, subsampling=0, optimize=True, progressive=True, dpi=(300, 300))
         return buf
     gioi_han = max_mb * 1_000_000  # MB thập phân như KiotViet đếm (2 MB = 2.000.000 byte)
-    thap, cao, tot = 75, 100, None
+    thap, cao, tot = 75, q_max, None
     while thap <= cao:
         q = (thap + cao) // 2
         buf = nen(q)
@@ -109,7 +113,7 @@ def luu_jpg(im, out, max_mb, min_mb):
         sys.exit("LỖI: chất lượng 75 vẫn quá giới hạn dung lượng. Giảm chi tiết nền (--do-dam) rồi xuất lại.")
     q, buf = tot
     open(out, "wb").write(buf.getvalue())
-    if buf.tell() < min_mb * 1_000_000:
+    if min_mb and buf.tell() < min_mb * 1_000_000:
         print(f"Ghi chú: ảnh ít chi tiết, chất lượng tối đa {q} chỉ {buf.tell() / 1e6:.2f} MB (< {min_mb} MB) — đây đã là bản nét nhất.")
     return q, buf.tell()
 
@@ -118,23 +122,27 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("html")
     p.add_argument("out")
+    p.add_argument("--co", choices=["1080", "4k"], default="1080",
+                   help="1080 = 1080x1920 (mặc định, up KiotViet không vỡ chữ); 4k = 2160x3840")
     p.add_argument("--w", type=int, default=1536)
     p.add_argument("--h", type=int, default=2731)
-    p.add_argument("--scale", type=float, default=2.5)
-    p.add_argument("--ra-w", type=int, default=2160, help="chiều ngang ảnh xuất ra (4K dọc)")
-    p.add_argument("--ra-h", type=int, default=3840)
     p.add_argument("--max-mb", type=float, default=1.9)
-    p.add_argument("--min-mb", type=float, default=1.5)
     a = p.parse_args()
+    # Cỡ 1080: chụp 2x (3072 px) rồi thu ~2,8 lần → chữ mịn; nét nhẹ hơn vì ảnh nhỏ.
+    CO = {"1080": dict(scale=2.0, ra=(1080, 1920), sharp=(0.8, 55, 2), q_max=95, min_mb=0),
+          "4k":   dict(scale=2.5, ra=(2160, 3840), sharp=(1.2, 45, 2), q_max=100, min_mb=1.5)}[a.co]
+    a.ra_w, a.ra_h = CO["ra"]
+    a.min_mb = CO["min_mb"]
 
-    to, co_qr = chup(a.html, a.w, a.h, a.scale, a.ra_w / a.w * 0.85)
-    anh = to.resize((a.ra_w, a.ra_h), Image.LANCZOS).filter(ImageFilter.UnsharpMask(radius=1.2, percent=45, threshold=2))
-    q, size = luu_jpg(anh, a.out, a.max_mb, a.min_mb)
+    to, co_qr = chup(a.html, a.w, a.h, CO["scale"], a.ra_w / a.w * 0.85)
+    r, pc, th = CO["sharp"]
+    anh = to.resize((a.ra_w, a.ra_h), Image.LANCZOS).filter(ImageFilter.UnsharpMask(radius=r, percent=pc, threshold=th))
+    q, size = luu_jpg(anh, a.out, a.max_mb, a.min_mb, CO["q_max"])
 
     goc, _ = os.path.splitext(a.out)
     xem = goc + "_xem-thu-dien-thoai.jpg"
     anh.resize((540, round(540 * a.ra_h / a.ra_w)), Image.LANCZOS).save(xem, quality=90)
-    print(f"OK: {a.out} — {a.ra_w}x{a.ra_h}px, JPG chất lượng {q}, {size / 1e6:.2f} MB (mục tiêu {a.min_mb}–{a.max_mb} MB)")
+    print(f"OK: {a.out} — {a.ra_w}x{a.ra_h}px, JPG chất lượng {q}, {size / 1e6:.2f} MB (tối đa {a.max_mb} MB)")
     print(f"Bản xem thử điện thoại: {xem}")
     if co_qr:
         kiem_qr(a.out)
