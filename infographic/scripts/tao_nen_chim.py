@@ -9,7 +9,7 @@ Tham số:
     --mam-benh   các nhóm mầm bệnh bị diệt trong CÔNG DỤNG (xem bảng MAM_BENH)
     --mau        màu chủ đạo lấy từ bao bì (mã hex)
     --do-dam     độ đậm biểu tượng chìm, mặc định 0.08 (0.06–0.12 là dễ nhìn)
-    --w --h      kích thước khung, mặc định 1536 x 2048
+    --w --h      kích thước khung, mặc định 1536 x 2731 (9:16)
     --scale      nhân độ phân giải, mặc định 2 (khớp với lúc chụp HTML ở 2x)
 
 Ảnh nền ra là nền sáng (trắng pha rất nhẹ màu chủ đạo) + biểu tượng dạng nét mảnh,
@@ -152,7 +152,7 @@ def main():
     p.add_argument("--out", required=True)
     p.add_argument("--do-dam", type=float, default=0.08)
     p.add_argument("--w", type=int, default=1536)
-    p.add_argument("--h", type=int, default=2048)
+    p.add_argument("--h", type=int, default=2731)
     p.add_argument("--scale", type=int, default=2)
     p.add_argument("--seed", type=int, default=3)
     a = p.parse_args()

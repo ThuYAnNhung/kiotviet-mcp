@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!--
+  ẢNH 2 – MXH BÌA: ảnh sản phẩm lớn + 3 điểm nổi bật dạng viên thuốc. Chỉ có logo, không liên hệ.
+  Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
+  - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
+  - {{CAM_KET}}: câu cam kết chính hãng viết riêng cho từng sản phẩm, bắt đầu bằng "✔", tối đa ~55 ký tự,
+    không ghi "ủy quyền"; "có số đăng ký lưu hành" chỉ ghi khi có SĐK thật.
+  - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
+  - {{NB_1}}..{{NB_3}}: mỗi nhãn tối đa 4 từ, lấy từ công dụng/quy cách.
+-->
+<link rel="stylesheet" href="an_nhung.css">
+<style>
+  :root { --mau: {{MAU}}; --mau-dam: {{MAU_DAM}};
+          --o-tp: {{MAU_O1}}; --o-dt: {{MAU_O2}}; --o-cd: {{MAU_O3}}; --o-ld: {{MAU_O4}}; }
+</style>
+</head>
+<body>
+<div class="khung">
+  <img class="nen" src="nen_chim.png" alt="">
+
+  <div class="dau"><img class="logo" src="logo_annhung.png" alt="An Nhung"></div>
+
+  <div class="tieu-de">{{TIEU_DE}}</div>
+  <div class="phu-de">{{PHU_DE}}</div>
+
+  <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+
+  <div class="noi-bat">
+    <span>{{NB_1}}</span><span>{{NB_2}}</span><span>{{NB_3}}</span>
+  </div>
+
+  <!-- Ảnh mạng xã hội: KHÔNG số điện thoại, địa chỉ, website, mã QR -->
+  <div class="chan">
+    <div class="cam-ket">{{CAM_KET}}</div>
+    <div class="slogan">NPP Thú Y An Nhung · Xây dựng niềm tin – Khẳng định thương hiệu</div>
+  </div>
+</div>
+</body>
+</html>

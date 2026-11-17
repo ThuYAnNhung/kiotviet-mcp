@@ -1,7 +1,7 @@
 """Lấy bộ màu cho infographic từ chính bao bì sản phẩm.
 
 Cách dùng:
-    python3 lay_mau_bao_bi.py <anh_san_pham.png> [--html infographic.html]
+    python3 lay_mau_bao_bi.py <anh_san_pham.png> [--html anh1.html mxh2.html ...]
 
 Làm gì:
 1. Gom màu trên bao bì (bỏ nền trong suốt, bỏ trắng/đen/xám) và xếp theo diện tích.
@@ -11,7 +11,7 @@ Làm gì:
 4. Đưa cả 4 màu về cùng độ đậm (tương phản ~5.8:1 với nền trắng, tối thiểu 4.5:1)
    để chữ đọc rõ và trông đồng bộ, vẫn giữ sắc màu của bao bì.
 In ra MAU, MAU_DAM, MAU_O1..MAU_O4 (O1 = Thành phần, O2 = Đối tượng, O3 = Công dụng, O4 = Liều dùng).
-Có --html thì điền thẳng vào các chỗ {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}.. trong file đó.
+Có --html thì điền thẳng vào các chỗ {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}.. trong các file đó (cả bộ 5 ảnh dùng chung màu).
 """
 import argparse
 import colorsys
@@ -88,7 +88,7 @@ def mau_bao_bi(path):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("anh")
-    p.add_argument("--html")
+    p.add_argument("--html", nargs="+")
     a = p.parse_args()
 
     goc = mau_bao_bi(a.anh)[:4]
@@ -116,16 +116,15 @@ def main():
     for k, v in gia_tri.items():
         print(f"{k} = {v}")
 
-    if a.html:
+    for f in a.html or []:
         try:
-            s = open(a.html, encoding="utf-8").read()
+            s = open(f, encoding="utf-8").read()
             for k, v in gia_tri.items():
                 s = s.replace("{{" + k + "}}", v)
-            open(a.html, "w", encoding="utf-8").write(s)
-            print(f"OK: đã điền màu vào {a.html}")
+            open(f, "w", encoding="utf-8").write(s)
+            print(f"OK: đã điền màu vào {f}")
         except Exception as e:
-            sys.exit(f"LỖI: không ghi được {a.html} ({e})")
-
+            sys.exit(f"LỖI: không ghi được {f} ({e})")
 
 if __name__ == "__main__":
     main()
