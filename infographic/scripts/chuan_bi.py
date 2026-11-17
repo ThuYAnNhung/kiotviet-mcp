@@ -7,12 +7,13 @@ Kết quả trong <thu_muc_lam_viec>:
     fonts/Anton-Regular.ttf, fonts/BeVietnamPro-*.ttf, fonts/NotoEmoji.ttf
     logo_annhung.png   (logo gốc nền trong, bản 1600px từ GitHub dự án)
     an_nhung.css + 5 mẫu HTML khung 9:16 (1536 x 2731):
-        mau_infographic.html                  ảnh 1 đầy đủ thông tin + QR (KiotViet, Zalo, website)
+        mau_infographic.html                  ảnh 1 đầy đủ thông tin (KiotViet, Zalo, website)
         mau_mxh_2_bia.html                    ảnh 2 MXH bìa
         mau_mxh_3_thanh_phan_cong_dung.html   ảnh 3 MXH thành phần & công dụng
         mau_mxh_4_doi_tuong_lieu_dung.html    ảnh 4 MXH đối tượng & liều dùng
         mau_mxh_5_tu_van.html                 ảnh 5 MXH tư vấn sử dụng
-    qr_web.png         mã QR trỏ tới https://www.thuyannhung.com (cần thư viện qrcode)
+        mau_video.html                        video ~35 giây
+    (Không còn mã QR trên ảnh — anh bỏ 17/11/2026; hàm tao_qr giữ lại nếu sau này cần.)
 
 Tải một lần rồi lưu đệm ở ~/.annhung/ để lần sau không tải lại.
 """
@@ -62,8 +63,7 @@ def main():
     for ten in sorted(os.listdir(ASSETS)):
         if ten.endswith((".html", ".css")) and not os.path.exists(os.path.join(tm, ten)):
             shutil.copy(os.path.join(ASSETS, ten), os.path.join(tm, ten))
-    tao_qr(os.path.join(tm, "qr_web.png"))
-    print(f"OK: đã chuẩn bị font + logo + 5 mẫu HTML + QR trong {tm}")
+    print(f"OK: đã chuẩn bị font + logo + 6 mẫu HTML trong {tm}")
 
 
 def tao_qr(dich):

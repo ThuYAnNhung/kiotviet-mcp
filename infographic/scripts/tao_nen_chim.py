@@ -13,7 +13,7 @@ Tham số:
                  biểu tượng chìm màu trắng; "nhat" = nền trắng pha nhạt màu chủ đạo, biểu tượng màu.
     --mau-dam    màu đậm cùng tông (MAU_DAM do lay_mau_bao_bi.py in ra), dùng cho --kieu-nen mau
     --w --h      kích thước khung, mặc định 1536 x 2731 (9:16)
-    --scale      nhân độ phân giải, mặc định 2 (khớp với lúc chụp HTML ở 2x)
+    --scale      nhân độ phân giải, mặc định 2,5 (khớp với lúc chụp HTML ở 2,5x cho ảnh 4K)
 
 Ảnh nền ra là nền sáng (trắng pha rất nhẹ màu chủ đạo) + biểu tượng dạng nét mảnh,
 rải đều, xoay nhẹ, xen kẽ con vật và mầm bệnh. Biểu tượng được làm thưa ở vùng giữa
@@ -156,7 +156,7 @@ def main():
     p.add_argument("--do-dam", type=float, default=0.08)
     p.add_argument("--w", type=int, default=1536)
     p.add_argument("--h", type=int, default=2731)
-    p.add_argument("--scale", type=int, default=2)
+    p.add_argument("--scale", type=float, default=2.5)
     p.add_argument("--seed", type=int, default=3)
     p.add_argument("--kieu-nen", choices=["mau", "nhat"], default="mau")
     p.add_argument("--mau-dam", default="")
@@ -171,7 +171,7 @@ def main():
     if not ds:
         sys.exit("LỖI: cần ít nhất 1 loài hoặc 1 mầm bệnh.")
 
-    W, H, S = a.w * a.scale, a.h * a.scale, a.scale
+    W, H, S = int(a.w * a.scale), int(a.h * a.scale), a.scale
     r, g, b = hex_rgb(a.mau)
     if a.kieu_nen == "mau":
         # nền màu chủ đạo: dải dọc MAU_DAM (trên) -> MAU (giữa) -> MAU_DAM (dưới), biểu tượng trắng

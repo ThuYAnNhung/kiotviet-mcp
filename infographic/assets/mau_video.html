@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!--
+  MẪU VIDEO 9:16 (1080 x 1920) — ~35 giây, dùng cho TikTok, YouTube Shorts, Reels. tao_video.py chụp từng cảnh rồi ghép.
+  Kịch bản (anh chốt 17/11/2026):
+    MỞ BÀI  (~7 s)  logo + TÊN SẢN PHẨM + SLOGAN sản phẩm chữ to, ảnh sản phẩm phóng to dần.
+                    {{SLOGAN}} = slogan in trên bao bì; bao bì không có thì dùng công dụng chính (dòng phụ của ảnh).
+    THÂN BÀI (~20 s) CÔNG DỤNG hiện lần lượt từng ý ({{CD_1}}..{{CD_4}}, xoá <li> thừa), rồi cảnh DÙNG CHO CON GÌ
+                    (mỗi loài một .loai) + DÙNG QUA ĐƯỜNG NÀO ({{DUONG_DUNG}}).
+    KẾT BÀI (~8 s)  mời nhắn tin cho trang, Follow, Like + logo + dòng chính hãng. KHÔNG số điện thoại.
+  Màu: chạy lay_mau_bao_bi.py <anh_san_pham> --html <file này> như 5 ảnh. Nền: nen_chim.png (cùng file với ảnh).
+  Video không chèn nhạc: lúc đăng chọn nhạc miễn phí bản quyền trong thư viện của từng nền tảng.
+-->
+<link rel="stylesheet" href="an_nhung.css">
+<style>
+  :root { --mau: {{MAU}}; --mau-dam: {{MAU_DAM}};
+          --o-tp: {{MAU_O1}}; --o-dt: {{MAU_O2}}; --o-cd: {{MAU_O3}}; --o-ld: {{MAU_O4}}; }
+  html, body { width: 1080px; height: 1920px; }
+  .khung { width: 1080px; height: 1920px; }
+  .canh { display: none; flex: 1; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+  body[data-canh="mo"] #mo, body[data-canh="cd"] #cd, body[data-canh="dt"] #dt, body[data-canh="ket"] #ket { display: flex; }
+  .dau { height: 170px; padding: 64px 48px 0; align-self: stretch; }
+  .nen-mau .dau .logo { width: 330px; padding: 12px 18px; border-radius: 22px; }
+  .nen-mau .dau .logo { background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .to { font-family: "Anton", sans-serif; text-transform: uppercase; color: #fff; text-align: center; line-height: 1.05;
+        text-shadow: 0 4px 0 rgba(0,0,0,.18), 0 8px 26px rgba(0,0,0,.35); padding: 0 50px; }
+  .vien { background: #fff; color: var(--mau-dam); border-radius: 80px; font-weight: 800; text-align: center;
+          box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .anh { position: relative; display: flex; justify-content: center; align-items: center; }
+  .anh::before { content: ""; position: absolute; width: 140%; height: 120%; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,.7) 45%, rgba(255,255,255,0)); }
+  /* ảnh sản phẩm luôn nằm gọn trong khung của nó, không tràn mép */
+  .anh img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+             filter: drop-shadow(0 18px 24px rgba(0,0,0,.2)); }
+  .the { background: rgba(255,255,255,.96); border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+
+  /* MỞ BÀI */
+  #mo .to { font-size: 124px; margin-top: 10px; }
+  #mo .vien { font-size: 52px; padding: 16px 44px; margin: 26px 50px 0; }
+  #mo .anh { flex: 1 1 0; min-height: 0; width: 960px; margin: 40px 0 90px; }
+
+  /* THÂN BÀI – công dụng */
+  #cd, #dt { justify-content: center; }
+  #cd .anh { height: 560px; width: 900px; flex: none; }
+  #cd .to { font-size: 116px; margin-top: 30px; }
+  #cd ul { list-style: none; width: 960px; margin-top: 34px; }
+  #cd li { font-size: 64px; font-weight: 700; line-height: 1.22; padding: 22px 30px 22px 100px; margin-bottom: 22px;
+           position: relative; }
+  #cd li::before { content: "✓"; position: absolute; left: 30px; top: 18px; color: var(--mau-dam); font-weight: 800; }
+  #cd li.an { visibility: hidden; }
+
+  /* THÂN BÀI – dùng cho con gì, đường nào */
+  #dt .to { font-size: 124px; }
+  #dt .loai-ds { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 980px; margin-top: 40px; }
+  #dt .loai { padding: 20px 26px; min-width: 260px; text-align: center; }
+  #dt .loai .hinh { font-family: "Noto Emoji"; font-size: 220px; line-height: 1.1; color: var(--mau-dam); }
+  #dt .loai .ten { font-size: 70px; font-weight: 800; }
+  #dt .duong { font-size: 124px; margin-top: 110px; }
+  #dt .vien { font-size: 80px; padding: 24px 70px; margin-top: 30px; }
+
+  /* KẾT BÀI */
+  #ket .logo-to { width: 640px; background: #fff; border-radius: 36px; padding: 26px 34px; margin-top: 200px;
+                  box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+  #ket .moi { width: 960px; margin-top: 110px; display: flex; flex-direction: column; gap: 30px; }
+  #ket .moi div { font-size: 70px; font-weight: 800; color: var(--mau-dam); padding: 28px 34px; display: flex; align-items: center; gap: 26px; }
+  #ket .moi .ic { font-family: "Noto Emoji"; font-size: 80px; }
+  /* chừa vùng dưới ~300px: TikTok/Reels che phần chú thích ở đáy màn hình */
+  #ket .chan-ket { margin-top: auto; margin-bottom: 300px; color: #fff; text-align: center; font-size: 44px; font-weight: 700; line-height: 1.35;
+                   background: rgba(0,0,0,.22); border-radius: 24px; padding: 18px 30px; width: 960px; }
+  #ket .chan-ket .sdk { display: block; color: #FFE27A; font-weight: 800; }
+</style>
+</head>
+<body class="nen-mau" data-canh="mo">
+<div class="khung">
+  <img class="nen" src="nen_chim.png" alt="">
+
+  <section class="canh" id="mo">
+    <div class="dau" style="flex:none"><img class="logo" src="logo_annhung.png" alt="An Nhung"></div>
+    <div class="to">{{TIEU_DE}}</div>
+    <div class="vien">{{SLOGAN}}</div>
+    <div class="anh"><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+  </section>
+
+  <section class="canh" id="cd">
+    <div class="anh"><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+    <div class="to">CÔNG DỤNG</div>
+    <ul><li class="the">{{CD_1}}</li><li class="the">{{CD_2}}</li><li class="the">{{CD_3}}</li><li class="the">{{CD_4}}</li></ul>
+  </section>
+
+  <section class="canh" id="dt">
+    <div class="to">DÙNG CHO</div>
+    <div class="loai-ds">
+      <div class="loai the"><div class="hinh">{{EMOJI_LOAI_1}}</div><div class="ten">{{TEN_LOAI_1}}</div></div>
+      <div class="loai the"><div class="hinh">{{EMOJI_LOAI_2}}</div><div class="ten">{{TEN_LOAI_2}}</div></div>
+    </div>
+    <div class="to duong">ĐƯỜNG DÙNG</div>
+    <div class="vien">{{DUONG_DUNG}}</div>
+  </section>
+
+  <section class="canh" id="ket">
+    <img class="logo-to" src="logo_annhung.png" alt="An Nhung">
+    <div class="moi">
+      <div class="the"><span class="ic">💬</span>Nhắn tin cho trang để được tư vấn</div>
+      <div class="the"><span class="ic">➕</span>Bấm Follow để xem thêm</div>
+      <div class="the"><span class="ic">👍</span>Thả Like nếu thấy hữu ích</div>
+    </div>
+    <div class="chan-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
+  </section>
+</div>
+<script>
+  // tao_video.py mở file với #canh=cd&hien=2 để chụp từng cảnh, từng bước hiện chữ
+  const q = new URLSearchParams(location.hash.slice(1));
+  document.body.dataset.canh = q.get("canh") || "mo";
+  const hien = parseInt(q.get("hien") || "99", 10);
+  document.querySelectorAll("#cd li").forEach((li, i) => { if (i >= hien) li.classList.add("an"); });
+</script>
+</body>
+</html>

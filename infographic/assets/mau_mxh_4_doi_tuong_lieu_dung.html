@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 4 – MXH ĐỐI TƯỢNG & LIỀU DÙNG. Liều chép đúng nhãn theo từng loài. Chỉ có logo, không liên hệ.
+  ẢNH 4 – MXH LIỀU DÙNG + ô Đối tượng thu nhỏ ở góc dưới trái. Liều chép đúng nhãn theo từng loài. Chỉ có logo, không liên hệ.
   Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
   - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
@@ -11,7 +11,7 @@
   - Nền: <body class="nen-mau"> = nền là màu chủ đạo bao bì (tao_nen_chim.py --kieu-nen mau);
     bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
   - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - Ô Đối tượng: mỗi loài một <div class="loai"> với ký tự Noto Emoji (🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
+  - Đối tượng: mỗi loài một <span class="loai-nho"><i>emoji</i>Tên</span> (Noto Emoji 🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
 -->
 <link rel="stylesheet" href="an_nhung.css">
 <style>
@@ -31,18 +31,20 @@
   <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
 
   <div class="luoi mot-cot">
-    <div class="o dt"><h3><span class="ic">🐾</span>ĐỐI TƯỢNG</h3>
-      <div class="loai-ds">
-        <div class="loai"><div class="hinh">{{EMOJI_LOAI_1}}</div><div class="ten">{{TEN_LOAI_1}}</div></div>
-        <div class="loai"><div class="hinh">{{EMOJI_LOAI_2}}</div><div class="ten">{{TEN_LOAI_2}}</div></div>
-      </div></div>
     <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
       <ul><li>{{LD_1}}</li><li>{{LD_2}}</li><li>{{LD_3}}</li><li>{{LD_4}}</li></ul></div>
   </div>
 
-  <div class="dai">
-    <span><b>Đường dùng:</b> {{DUONG_DUNG}}</span>
-    <span><b>Ngừng thuốc:</b> {{NGUNG_THUOC}}</span>
+  <!-- Ô Đối tượng thu nhỏ ở góc trái (anh chốt 17/11, giống ảnh 1) + Đường dùng / Ngừng thuốc -->
+  <div class="hang-cuoi">
+    <div class="dt-nho"><b>🐾 Dùng cho</b>
+      <span class="loai-nho"><i>{{EMOJI_LOAI_1}}</i>{{TEN_LOAI_1}}</span>
+      <span class="loai-nho"><i>{{EMOJI_LOAI_2}}</i>{{TEN_LOAI_2}}</span>
+    </div>
+    <div class="dai">
+      <span><b>Đường dùng:</b> {{DUONG_DUNG}}</span>
+      <span><b>Ngừng thuốc:</b> {{NGUNG_THUOC}}</span>
+    </div>
   </div>
 
   <!-- Ảnh mạng xã hội: KHÔNG số điện thoại, địa chỉ, website, mã QR -->
