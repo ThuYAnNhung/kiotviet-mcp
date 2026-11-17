@@ -3,23 +3,20 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 1 – ĐẦY ĐỦ THÔNG TIN (KiotViet, gửi khách Zalo, website): 3 ô chủ đạo tự xếp + ô Đối tượng nhỏ + chân trang đầy đủ (không QR).
-  Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
+  ẢNH 1 – ĐẦY ĐỦ THÔNG TIN (KiotViet, gửi khách Zalo, website): ảnh sản phẩm trái, 3 ô Thành phần / Công dụng / Liều dùng phải,
+  hàng cuối ô Đối tượng nhỏ + Quy cách / SĐK, chân trang đầy đủ (không QR).
+  ẢNH VUÔNG 800 x 800 (anh chốt 17/11/2026). Bố cục dựng trên khung 1200 x 1200 px; xuat_anh_kiotviet.py chụp 2x rồi thu về 800 x 800.
+  Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung_800.css (không sửa cỡ chữ); an_nhung_800.js tự thu gọn khi nội dung nhiều.
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
   - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
     Trung ương NAVETCO"); {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá cả thẻ <span class="sdk">.
-  - Nền: <body class="nen-mau"> = nền là màu chủ đạo bao bì (tao_nen_chim.py --kieu-nen mau);
+  - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). <body class="nen-mau"> = nền màu chủ đạo bao bì;
     bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
   - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - 3 ô chủ đạo: Thành phần, Công dụng, Liều dùng (anh chốt 17/11). Script cuối trang tự xếp:
-      ý ngắn (≤ 22 ký tự) → Thành phần | Công dụng thành 2 cột dọc, Liều dùng nằm ngang bên dưới;
-      ý dài (nhiều ký tự)  → 3 ô xếp thành 3 hàng ngang rộng hết khung.
-    Ô Đối tượng thu nhỏ ở góc dưới cùng bên trái. Khi 3 ô nhiều thông tin làm ảnh sản phẩm còn thấp,
-    chân trang tự thu gọn (chữ nhỏ hơn, gộp dòng) để nhường chỗ cho sản phẩm.
+  - Mỗi ô tối đa 4 ý, mỗi ý ngắn gọn (~35 ký tự). Nhiều hơn thì rút gọn hoặc để ảnh MXH 3/4 nói kỹ.
   - Đối tượng: mỗi loài một <span class="loai-nho"><i>emoji</i>Tên</span> (Noto Emoji 🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
-  - Không có mã QR (anh bỏ 17/11).
 -->
-<link rel="stylesheet" href="an_nhung.css">
+<link rel="stylesheet" href="an_nhung_800.css">
 <style>
   :root { --mau: {{MAU}}; --mau-dam: {{MAU_DAM}};
           --o-tp: {{MAU_O1}}; --o-dt: {{MAU_O2}}; --o-cd: {{MAU_O3}}; --o-ld: {{MAU_O4}}; }
@@ -27,26 +24,26 @@
 </head>
 <body class="nen-mau">
 <div class="khung">
-  <img class="nen" src="nen_chim.png" alt="">
+  <img class="nen" src="nen_vuong.png" alt="">
 
-  <div class="dau"><img class="logo" src="logo_annhung.png" alt="An Nhung"></div>
-
-  <div class="tieu-de">{{TIEU_DE}}</div>
-  <div class="phu-de">{{PHU_DE}}</div>
-
-  <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
-
-  <!-- 3 ô chủ đạo; class bo-doc / bo-ngang do script cuối trang tự chọn -->
-  <div class="luoi3">
-    <div class="o tp"><h3><span class="ic">🧪</span>THÀNH PHẦN</h3>
-      <ul><li>{{TP_1}}</li><li>{{TP_2}}</li><li>{{TP_3}}</li></ul></div>
-    <div class="o cd"><h3><span class="ic">🛡</span>CÔNG DỤNG</h3>
-      <ul><li>{{CD_1}}</li><li>{{CD_2}}</li><li>{{CD_3}}</li></ul></div>
-    <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
-      <ul><li>{{LD_1}}</li><li>{{LD_2}}</li><li>{{LD_3}}</li></ul></div>
+  <div class="dau">
+    <img class="logo" src="logo_annhung.png" alt="An Nhung">
+    <div class="ten"><div class="tieu-de">{{TIEU_DE}}</div><div class="phu-de">{{PHU_DE}}</div></div>
   </div>
 
-  <!-- Hàng cuối: ô Đối tượng thu nhỏ ở góc trái + Quy cách / SĐK (Ngừng thuốc chỉ ghi ở ảnh MXH, anh chốt 17/11) -->
+  <div class="than">
+    <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+    <div class="cot">
+      <div class="o tp"><h3><span class="ic">🧪</span>THÀNH PHẦN</h3>
+        <ul><li>{{TP_1}}</li><li>{{TP_2}}</li><li>{{TP_3}}</li></ul></div>
+      <div class="o cd"><h3><span class="ic">🛡</span>CÔNG DỤNG</h3>
+        <ul><li>{{CD_1}}</li><li>{{CD_2}}</li><li>{{CD_3}}</li></ul></div>
+      <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
+        <ul><li>{{LD_1}}</li><li>{{LD_2}}</li><li>{{LD_3}}</li></ul></div>
+    </div>
+  </div>
+
+  <!-- Hàng cuối: ô Đối tượng thu nhỏ ở góc trái + Quy cách / SĐK (Ngừng thuốc chỉ ghi ở ảnh MXH) -->
   <div class="hang-cuoi">
     <div class="dt-nho"><b>🐾 Dùng cho</b>
       <span class="loai-nho"><i>{{EMOJI_LOAI_1}}</i>{{TEN_LOAI_1}}</span>
@@ -58,23 +55,13 @@
     </div>
   </div>
 
-  <!-- Ảnh 1 đầy đủ: thông tin An Nhung, không mã QR. Khi thu gọn (body.chan-gon) còn 4 dòng. -->
+  <!-- Ảnh 1 đầy đủ: thông tin An Nhung, không mã QR -->
   <div class="chan day-du">
     <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
-    <div class="ten-npp">NPP THÚ Y AN NHUNG<span class="gon-them"> · Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</span></div>
-    <div class="dong">21 Tô Hiệu, TP. Buôn Ma Thuột, Đắk Lắk<span class="gon-them"> · Xây dựng niềm tin – Khẳng định thương hiệu</span></div>
-    <div class="dong khong-gon">Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</div>
-    <div class="slogan khong-gon">Xây dựng niềm tin – Khẳng định thương hiệu</div>
+    <div class="ten-npp">NPP THÚ Y AN NHUNG · Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</div>
+    <div class="dong">21 Tô Hiệu, TP. Buôn Ma Thuột, Đắk Lắk · Xây dựng niềm tin – Khẳng định thương hiệu</div>
   </div>
 </div>
-<script>
-  // Tự xếp 3 ô theo độ dài chữ, rồi thu gọn chân trang nếu ảnh sản phẩm bị ép thấp.
-  const ys = [...document.querySelectorAll('.luoi3 .tp li, .luoi3 .cd li')].map(li => li.innerText.trim().length);
-  const dai = ys.some(n => n > 22);
-  document.querySelector('.luoi3').classList.add(dai ? 'bo-ngang' : 'bo-doc');
-  const sp = document.querySelector('.san-pham'), chan = document.querySelector('.chan');
-  if (sp.clientHeight < 640 || chan.getBoundingClientRect().bottom > innerHeight)
-    document.body.classList.add('chan-gon');
-</script>
+<script src="an_nhung_800.js"></script>
 </body>
 </html>

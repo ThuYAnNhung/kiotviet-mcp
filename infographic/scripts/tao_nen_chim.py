@@ -12,8 +12,10 @@ Tham số:
     --kieu-nen   "mau" = nền chính là màu chủ đạo của bao bì (đậm ở trên/dưới, sáng dần ở giữa),
                  biểu tượng chìm màu trắng; "nhat" = nền trắng pha nhạt màu chủ đạo, biểu tượng màu.
     --mau-dam    màu đậm cùng tông (MAU_DAM do lay_mau_bao_bi.py in ra), dùng cho --kieu-nen mau
-    --w --h      kích thước khung, mặc định 1536 x 2731 (9:16)
-    --scale      nhân độ phân giải, mặc định 2,5 (khớp với lúc chụp HTML ở 2,5x cho ảnh 4K)
+    --w --h      kích thước khung. Ảnh vuông 800x800: --w 1200 --h 1200 --scale 2 --out nen_vuong.png
+                 (sản phẩm nằm bên trái nên vùng làm thưa dời sang trái).
+                 Video 9:16: mặc định 1536 x 2731 --scale 2,5 --out nen_chim.png.
+    --scale      nhân độ phân giải (khớp với lúc chụp HTML)
 
 Ảnh nền ra là nền sáng (trắng pha rất nhẹ màu chủ đạo) + biểu tượng dạng nét mảnh,
 rải đều, xoay nhẹ, xen kẽ con vật và mầm bệnh. Biểu tượng được làm thưa ở vùng giữa
@@ -190,7 +192,7 @@ def main():
     lop = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     rnd = random.Random(a.seed)
 
-    o = 250 * S  # bước lưới
+    o = (200 if abs(W - H) < 2 else 250) * S  # bước lưới (ảnh vuông dày hơn chút)
     cot, hang = math.ceil(W / o) + 1, math.ceil(H / o) + 1
     thu_tu = []  # xáo trộn để con vật và mầm bệnh xen kẽ đều khắp ảnh
     for hy in range(hang):
@@ -198,13 +200,16 @@ def main():
             x = cx * o + (o / 2 if hy % 2 else 0) + rnd.uniform(-0.18, 0.18) * o
             y = hy * o + rnd.uniform(-0.18, 0.18) * o
             # làm thưa vùng giữa (ảnh sản phẩm) — bỏ qua 2/3 biểu tượng ở đó
-            if 0.25 * W < x < 0.75 * W and 0.2 * H < y < 0.52 * H and rnd.random() < 0.67:
+            vuong = abs(W - H) < 2
+            vung = (0.02 * W < x < 0.42 * W and 0.2 * H < y < 0.85 * H) if vuong else \
+                   (0.25 * W < x < 0.75 * W and 0.2 * H < y < 0.52 * H)
+            if vung and rnd.random() < 0.67:
                 continue
             if not thu_tu:
                 thu_tu = ds[:]
                 rnd.shuffle(thu_tu)
             loai, ma = thu_tu.pop()
-            s = int(rnd.uniform(120, 175) * S)
+            s = int((rnd.uniform(95, 135) if abs(W - H) < 2 else rnd.uniform(120, 175)) * S)
             ic = o_bieu_tuong(loai, ma, s, mau, a.font).rotate(rnd.uniform(-22, 22), resample=Image.BICUBIC, expand=True)
             px, py = int(x - ic.width / 2), int(y - ic.height / 2)
             # cắt phần tràn mép trái/trên (alpha_composite không nhận toạ độ âm)

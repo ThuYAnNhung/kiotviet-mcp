@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 2 – MXH BÌA: ảnh sản phẩm lớn + 3 điểm nổi bật dạng viên thuốc. Chỉ có logo, không liên hệ.
-  Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
+  ẢNH 2 – MXH BÌA: ảnh sản phẩm lớn ở giữa + 3 điểm nổi bật dạng viên thuốc. Chỉ có logo, không liên hệ.
+  ẢNH VUÔNG 800 x 800 (anh chốt 17/11/2026). Bố cục dựng trên khung 1200 x 1200 px; xuat_anh_kiotviet.py chụp 2x rồi thu về 800 x 800.
+  Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung_800.css (không sửa cỡ chữ); an_nhung_800.js tự thu gọn khi nội dung nhiều.
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
   - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
     Trung ương NAVETCO"); {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá cả thẻ <span class="sdk">.
-  - Nền: <body class="nen-mau"> = nền là màu chủ đạo bao bì (tao_nen_chim.py --kieu-nen mau);
+  - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). <body class="nen-mau"> = nền màu chủ đạo bao bì;
     bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
   - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
   - {{NB_1}}..{{NB_3}}: mỗi nhãn tối đa 4 từ, lấy từ công dụng/quy cách.
 -->
-<link rel="stylesheet" href="an_nhung.css">
+<link rel="stylesheet" href="an_nhung_800.css">
 <style>
   :root { --mau: {{MAU}}; --mau-dam: {{MAU_DAM}};
           --o-tp: {{MAU_O1}}; --o-dt: {{MAU_O2}}; --o-cd: {{MAU_O3}}; --o-ld: {{MAU_O4}}; }
@@ -21,14 +22,16 @@
 </head>
 <body class="nen-mau">
 <div class="khung bia">
-  <img class="nen" src="nen_chim.png" alt="">
+  <img class="nen" src="nen_vuong.png" alt="">
 
-  <div class="dau"><img class="logo" src="logo_annhung.png" alt="An Nhung"></div>
+  <div class="dau">
+    <img class="logo" src="logo_annhung.png" alt="An Nhung">
+    <div class="ten"><div class="tieu-de">{{TIEU_DE}}</div><div class="phu-de">{{PHU_DE}}</div></div>
+  </div>
 
-  <div class="tieu-de">{{TIEU_DE}}</div>
-  <div class="phu-de">{{PHU_DE}}</div>
-
-  <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+  <div class="than">
+    <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+  </div>
 
   <div class="noi-bat">
     <span>{{NB_1}}</span><span>{{NB_2}}</span><span>{{NB_3}}</span>
@@ -40,5 +43,6 @@
     <div class="slogan">NPP Thú Y An Nhung · Xây dựng niềm tin – Khẳng định thương hiệu</div>
   </div>
 </div>
+<script src="an_nhung_800.js"></script>
 </body>
 </html>
