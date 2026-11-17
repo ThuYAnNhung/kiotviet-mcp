@@ -12,7 +12,8 @@ Kết quả trong <thu_muc_lam_viec>:
         mau_mxh_3_thanh_phan_cong_dung.html   ảnh 3 MXH thành phần & công dụng
         mau_mxh_4_doi_tuong_lieu_dung.html    ảnh 4 MXH đối tượng & liều dùng
         mau_mxh_5_tu_van.html                 ảnh 5 MXH tư vấn sử dụng
-        mau_video.html                        video ~35 giây
+        mau_video_30s.html                    video 30 giây có giọng đọc + phụ đề (tao_video_30s.py)
+        mau_video.html                        video ~35 giây kiểu cũ (dự phòng)
     (Không còn mã QR trên ảnh — anh bỏ 17/11/2026; hàm tao_qr giữ lại nếu sau này cần.)
 
 Tải một lần rồi lưu đệm ở ~/.annhung/ để lần sau không tải lại.

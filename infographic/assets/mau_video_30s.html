@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!--
+  VIDEO 30 GIÂY (anh chốt 17/11 lần 4) – 1080 x 1920, do tao_video_30s.py điều khiển, KHÔNG sửa tay.
+  Nội dung lấy từ kich_ban.json (cùng thư mục): hook, các cảnh 3 giây, kết bài.
+  Lớp chữ/hình vẽ trên nền trong suốt; cảnh nào có "clip" thì video quay thật nằm bên dưới.
+-->
+<link rel="stylesheet" href="an_nhung.css">
+<style>
+  :root { --mau: #BB3E8C; --mau-dam: #7A295B; }
+  html, body { width: 1080px; height: 1920px; background: transparent; overflow: hidden; }
+  body { font-family: "Be Vietnam Pro", sans-serif; }
+  .nen-ve { position: absolute; inset: 0; background: linear-gradient(180deg, var(--mau-dam), var(--mau) 45%, var(--mau-dam)); }
+  .nen-ve img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .toi { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,0) 22%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55)); }
+  .logo-nho { position: absolute; left: 40px; top: 70px; width: 270px; background: #fff; border-radius: 22px; padding: 12px 18px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  .logo-nho img { width: 100%; display: block; }
+  .canh { position: absolute; inset: 0; display: none; }
+  .canh.hien { display: block; }
+  /* HOOK */
+  .hook { position: absolute; left: 60px; right: 60px; top: 300px; text-align: center; font-family: "Anton", sans-serif; font-size: 118px; line-height: 1.12;
+          color: #fff; text-shadow: 0 8px 0 var(--mau-dam), 0 14px 30px rgba(0,0,0,.5); transform-origin: 50% 50%; }
+  .hook .vang { color: #FFE14D; }
+  .sp { position: absolute; left: 50%; transform-origin: 50% 100%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
+  .quang { position: absolute; left: 50%; width: 900px; height: 900px; margin-left: -450px; border-radius: 50%;
+           background: radial-gradient(circle, rgba(255,255,255,.75), rgba(255,255,255,0) 65%); }
+  /* CẢNH 3 GIÂY */
+  .hinh { position: absolute; left: 0; right: 0; top: 330px; height: 820px; }
+  .hinh .e { position: absolute; font-family: "Noto Emoji"; color: #fff; line-height: 1; text-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .the-so { position: absolute; left: 90px; right: 90px; top: 20px; background: #fff; border-radius: 40px; padding: 40px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+  .the-so b { display: block; font-family: "Anton"; font-size: 150px; color: var(--mau-dam); line-height: 1.05; }
+  .the-so span { font-size: 58px; font-weight: 700; color: #333; }
+  .phu-de { position: absolute; left: 60px; right: 60px; top: 1230px; text-align: center; }
+  .phu-de div { display: inline; font-size: 72px; font-weight: 800; line-height: 1.32; color: #fff; padding: 6px 22px;
+                background: rgba(20,10,20,.78); border-radius: 18px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .phu-de .w { opacity: .38; }
+  .phu-de .w.on { opacity: 1; }
+  .phu-de .w.nhan { color: #FFE14D; }
+  /* KẾT */
+  .ket-logo { position: absolute; left: 50%; top: 250px; width: 560px; margin-left: -280px; background: #fff; border-radius: 34px; padding: 26px 34px; }
+  .ket-logo img { width: 100%; display: block; }
+  .moi { position: absolute; left: 70px; right: 70px; top: 520px; }
+  .moi .nut { background: #fff; border-radius: 30px; padding: 26px 30px; margin-bottom: 28px; font-size: 56px; font-weight: 800; color: var(--mau-dam);
+              display: flex; align-items: center; gap: 26px; box-shadow: 0 14px 36px rgba(0,0,0,.28); }
+  .moi .nut.chinh { background: #FFE14D; color: #3a1030; font-size: 62px; }
+  .moi .nut i { font-family: "Noto Emoji"; font-style: normal; font-size: 70px; }
+  .chinh-hang { position: absolute; left: 70px; right: 70px; top: 1340px; text-align: center; font-size: 42px; font-weight: 700; color: #fff;
+                background: rgba(20,10,20,.7); border-radius: 22px; padding: 20px 24px; line-height: 1.45; }
+  .chinh-hang span { display: block; color: #FFE14D; }
+</style>
+</head>
+<body>
+<div class="nen-ve" id="nenVe"><img src="nen_chim.png" alt=""></div>
+<div id="san"></div>
+<div class="logo-nho" id="logoNho"><img src="logo_annhung.png" alt=""></div>
+<script>
+const KB = window.KICH_BAN;            // tao_video_30s.py chèn trước khi chụp
+const san = document.getElementById('san');
+const ez = (x) => Math.max(0, Math.min(1, x));
+const pop = (x) => { x = ez(x); return 1 - Math.pow(1 - x, 3) * Math.cos(x * 4.2); };   // nảy nhẹ khi hiện
+
+function taoCanh(c, i) {
+  const d = document.createElement('div'); d.className = 'canh'; d.id = 'c' + i;
+  if (c.loai === 'hook') {
+    d.innerHTML = `<div class="quang" style="top:860px"></div><img class="sp" src="${KB.anh_san_pham}" style="top:900px;height:820px">` +
+                  `<div class="hook">${c.chu}</div>`;
+  } else if (c.loai === 'ket') {
+    d.innerHTML = `<div class="ket-logo"><img src="logo_annhung.png"></div><div class="moi">` +
+      `<div class="nut chinh"><i>💬</i>${c.moi}</div><div class="nut"><i>➕</i>Bấm Follow để xem thêm</div>` +
+      `<div class="nut"><i>👍</i>Thả Like nếu thấy hữu ích</div></div>` +
+      `<div class="chinh-hang">✔ Hàng chính hãng từ công ty ${KB.nha_san_xuat}<span>Số đăng ký lưu hành: ${KB.sdk}</span></div>`;
+  } else {
+    let h = '<div class="hinh">';
+    if (c.so) h += `<div class="the-so"><b>${c.so}</b><span>${c.so_phu || ''}</span></div>`;
+    (c.hinh || []).forEach((e, k) => {
+      h += `<div class="e" data-k="${k}" data-kieu="${e.kieu || ''}" style="left:${e.x}px;top:${e.y}px;font-size:${e.co || 220}px;${e.mau ? 'color:' + e.mau : ''}">${e.ky === 'SP' ? `<img src="${KB.anh_san_pham}" style="height:${e.co}px">` : e.ky}</div>`;
+    });
+    h += '</div>';
+    const tu = c.chu.split(' ').map(w => `<span class="w${w.startsWith('*') ? ' nhan' : ''}">${w.replace(/^\*/, '')} </span>`).join('');
+    h += `<div class="phu-de"><div>${tu}</div></div>`;
+    d.innerHTML = h;
+  }
+  san.appendChild(d);
+}
+KB.canh.forEach(taoCanh);
+
+// Vẽ khung hình tại thời điểm t (giây). Trả về chỉ số cảnh.
+window.ve = function (t) {
+  let i = KB.canh.findIndex(c => t >= c.bd && t < c.kt); if (i < 0) i = KB.canh.length - 1;
+  const c = KB.canh[i], u = t - c.bd, L = c.kt - c.bd;
+  document.querySelectorAll('.canh').forEach((el, k) => el.classList.toggle('hien', k === i));
+  document.getElementById('nenVe').style.display = c.clip ? 'none' : 'block';
+  document.getElementById('logoNho').style.display = c.loai === 'ket' ? 'none' : 'block';
+  const el = document.getElementById('c' + i);
+  if (c.loai === 'hook') {
+    const hk = el.querySelector('.hook');
+    const nay = 1 + 0.07 * Math.abs(Math.sin(u * Math.PI * 2.6)) * (u > 0.35 ? 1 : 0);   // chữ giật nảy
+    hk.style.transform = `scale(${(0.4 + 0.6 * pop(u / 0.35)) * nay}) rotate(${Math.sin(u * 18) * 1.2 * (u < 0.6 ? 1 : 0.4)}deg)`;
+    const sp = el.querySelector('.sp'); sp.style.transform = `translateX(-50%) scale(${0.85 + 0.15 * pop(u / 0.6) + 0.03 * u})`;
+  } else if (c.loai === 'ket') {
+    el.querySelectorAll('.nut').forEach((n, k) => { const x = ez((u - 0.2 - k * 0.25) / 0.35); n.style.opacity = x; n.style.transform = `translateY(${(1 - x) * 60}px) scale(${k === 0 ? 1 + 0.04 * Math.abs(Math.sin(u * 5)) : 1})`; });
+    el.querySelector('.ket-logo').style.transform = `scale(${pop(u / 0.4)})`;
+  } else {
+    const the = el.querySelector('.the-so'); if (the) the.style.transform = `scale(${pop(u / 0.3)})`;
+    el.querySelectorAll('.e').forEach(e => {
+      const k = +e.dataset.k, kieu = e.dataset.kieu, x = pop((u - k * 0.12) / 0.3);
+      let tf = `scale(${x})`;
+      if (kieu === 'chay') tf += ` translateX(${(u / L) * 260 - 130}px) translateY(${-Math.abs(Math.sin(u * 9 + k)) * 40}px)`;
+      if (kieu === 'bay') tf += ` translateY(${Math.sin(u * 3 + k) * 30}px) rotate(${Math.sin(u * 2 + k) * 12}deg)`;
+      if (kieu === 'om') { tf += ` rotate(${-14 + Math.sin(u * 2) * 3}deg)`; e.style.filter = 'grayscale(1) brightness(.85)'; }
+      if (kieu === 'diet') { const m = ez((u - 1.2) / 0.6); tf = `scale(${x * (1 - m)}) rotate(${m * 90}deg)`; }
+      if (kieu === 'xit') { tf += ` scale(${1 + 0.12 * Math.abs(Math.sin(u * 7))})`; }
+      if (kieu === 'zoom') tf += ` scale(${1 + 0.06 * u})`;
+      e.style.transform = tf;
+    });
+    // phụ đề chạy liên tục: chữ hiện dần theo nhịp đọc
+    const w = el.querySelectorAll('.phu-de .w'), toc = Math.min(L - 0.4, c.giay_doc || L * 0.8);
+    w.forEach((s, k) => s.classList.toggle('on', u >= 0.1 + (k / w.length) * toc));
+  }
+  return i;
+};
+</script>
+</body>
+</html>
