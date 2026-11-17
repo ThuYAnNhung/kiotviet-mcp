@@ -117,3 +117,18 @@ body { font-family: "Be Vietnam Pro", sans-serif; color: var(--chu);
 .gon .tieu-de { font-size: 72px; }
 .gon .chan .cam-ket, .gon .chan .slogan { font-size: 29px; }
 .gon .dai span, .gon .dt-nho, .gon .hoat-chat { font-size: 31px; }
+
+/* ẢNH 4 – Cam kết An Nhung: 3 huy hiệu ngang hết khung (không liên hệ) */
+.cam-ket-an { display: flex; gap: 14px; padding: 16px var(--le) 0; flex: none; }
+.cam-ket-an div { flex: 1; background: #fff; border-radius: 18px; padding: 10px 12px; text-align: center;
+                  border-top: 8px solid var(--mau); box-shadow: 0 5px 14px rgba(0,0,0,.1);
+                  font-size: 31px; font-weight: 800; color: var(--mau-dam); line-height: 1.15; }
+.cam-ket-an i { display: block; font-style: normal; font-family: "Noto Emoji"; font-size: 46px; color: var(--mau); }
+.cam-ket-an-tieu-de { text-align: center; color: #fff; font-weight: 800; font-size: 34px; padding: 14px var(--le) 0;
+                      text-shadow: 0 2px 8px rgba(0,0,0,.3); flex: none; letter-spacing: .5px; }
+/* Ảnh 5 có 3 ô: thu chữ về mức tối thiểu */
+.trang.ba-o .o li { font-size: 34px; margin-bottom: 0; line-height: 1.16; }
+.trang.ba-o .o h3 { font-size: 36px; margin-bottom: 0; }
+.trang.ba-o .o h3 .ic { font-size: 38px; }
+.trang.ba-o .o { padding: 8px 18px 6px; }
+.trang.ba-o .cot { gap: 10px; }

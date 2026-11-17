@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 3 – CÁCH DÙNG (có logo): ảnh sản phẩm trái; phải: ô Liều dùng theo từng loài (chép đúng nhãn);
-  hàng cuối: Dùng cho (biểu tượng loài) + Đường dùng + Ngừng thuốc.
+  ẢNH 3 – CÔNG DỤNG & MẸO DÙNG (có logo, anh chốt 17/11 lần 7): ảnh sản phẩm trái; phải: ô Công dụng (bệnh, tác dụng chính)
+  + ô Mẹo dùng (từ mục 💡 của mô tả); hàng cuối: Quy cách / SĐK (hoặc TCCS) / Bảo quản.
   ẢNH VUÔNG 800 x 800 (anh chốt 17/11/2026). Khung bố cục 1200 x 1200; xuat_anh_kiotviet.py chụp 2x rồi thu về 800 x 800.
   Mỗi ảnh một ý, ít chữ để chữ to (chữ trong ô ra ~27 px, tối thiểu 24 px): gửi Zalo phóng to không rỗ chữ.
   Kiểu chữ, cỡ chữ nằm trong an_nhung_800.css (không sửa); an_nhung_800.js tự thu gọn khi nội dung nhiều.
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
   - {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn: "Công ty Cổ phần" → "CP");
     {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá thẻ <span class="sdk"> và chip SĐK.
+    Sản phẩm dinh dưỡng chỉ có tiêu chuẩn cơ sở (TCCS): coi như SĐK, KHÔNG hỏi lại anh — {{NHAN_SDK}} = "Tiêu chuẩn cơ sở",
+    {{NHAN_SDK_NGAN}} = "TCCS", {{SDK}} = số TCCS. Có SĐK thì {{NHAN_SDK}} = "Số đăng ký lưu hành", {{NHAN_SDK_NGAN}} = "SĐK".
   - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). Bỏ class nen-mau = nền nhạt (--kieu-nen nhat).
   - Dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - Liều dùng 2–4 ý, mỗi ý ~25 ký tự (vd. "Heo: 1 ml/10 kg TT").
-  - Loài: <span class="loai-nho"><i>emoji</i>Tên</span> (Noto Emoji 🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
+  - Công dụng 2–4 ý, Mẹo dùng 2–3 ý, mỗi ý ~25 ký tự. Thuốc kháng sinh: một mẹo "Dùng theo hướng dẫn bác sĩ thú y".
 -->
 <link rel="stylesheet" href="an_nhung_800.css">
 <style>
@@ -34,25 +35,24 @@
   <div class="than">
     <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
     <div class="cot">
-      <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
-        <ul><li>{{LD_1}}</li><li>{{LD_2}}</li><li>{{LD_3}}</li></ul></div>
+      <div class="o cd"><h3><span class="ic">🛡</span>CÔNG DỤNG</h3>
+        <ul><li>{{CD_1}}</li><li>{{CD_2}}</li><li>{{CD_3}}</li></ul></div>
+      <div class="o tv"><h3><span class="ic">💡</span>MẸO DÙNG</h3>
+        <ul><li>{{TV_1}}</li><li>{{TV_2}}</li></ul></div>
     </div>
   </div>
 
   <div class="hang-cuoi">
-    <div class="dt-nho"><b>🐾 Dùng cho</b>
-      <span class="loai-nho"><i>{{EMOJI_LOAI_1}}</i>{{TEN_LOAI_1}}</span>
-      <span class="loai-nho"><i>{{EMOJI_LOAI_2}}</i>{{TEN_LOAI_2}}</span>
-    </div>
     <div class="dai">
-      <span><b>Đường dùng:</b> {{DUONG_DUNG}}</span>
-      <span><b>Ngừng thuốc:</b> {{NGUNG_THUOC}}</span>
+      <span><b>Quy cách:</b> {{QUY_CACH}}</span>
+      <span><b>{{NHAN_SDK_NGAN}}:</b> {{SDK}}</span>
+      <span><b>Bảo quản:</b> {{BAO_QUAN}}</span>
     </div>
   </div>
 
   <!-- Ảnh có logo dùng chung KiotViet + MXH: KHÔNG số điện thoại, địa chỉ, website, mã QR -->
   <div class="chan">
-    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
+    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">{{NHAN_SDK}}: {{SDK}}</span></div>
     <div class="slogan">NPP Thú Y An Nhung · Xây dựng niềm tin – Khẳng định thương hiệu</div>
   </div>
 </div>

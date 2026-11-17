@@ -7,10 +7,10 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 | Ảnh | Mẫu | Nội dung |
 |---|---|---|
 | 1 | `assets/mau_1_bia.html` | Bìa (có logo): sản phẩm lớn + 3 nhãn nổi bật — ảnh đại diện KiotViet, ảnh đầu album MXH |
-| 2 | `assets/mau_2_cong_dung.html` | Công dụng (có logo): 3–5 bệnh/tác dụng + 1 dòng hoạt chất |
-| 3 | `assets/mau_3_cach_dung.html` | Cách dùng (có logo): liều theo loài + Dùng cho + Đường dùng + Ngừng thuốc |
-| 4 | `assets/mau_4_luu_y.html` | Lưu ý & bảo quản (có logo): 3–4 mẹo dùng + Quy cách / SĐK / Bảo quản |
-| 5 | `assets/mau_5_phieu_thong_tin.html` | Phiếu thông tin KHÔNG thương hiệu: không logo, không thông tin An Nhung, chỉ giữ NSX + SĐK — để khách chuyển tiếp cho trại |
+| 2 | `assets/mau_2_thanh_phan_lieu_dung.html` | Thành phần & liều dùng (có logo): thành phần + liều từng loài + Dùng cho / Đường dùng / Ngừng thuốc |
+| 3 | `assets/mau_3_cong_dung_meo.html` | Công dụng & mẹo dùng (có logo): công dụng + mẹo dùng + Quy cách / SĐK (TCCS) / Bảo quản |
+| 4 | `assets/mau_4_vi_sao_chon.html` | Vì sao nên chọn + Cam kết từ An Nhung (có logo): 3 ưu điểm sản phẩm + 3 huy hiệu cam kết, không liên hệ |
+| 5 | `assets/mau_5_phieu_thong_tin.html` | Phiếu thông tin KHÔNG thương hiệu: không logo, không thông tin An Nhung; thành phần, công dụng, liều dùng + NSX + SĐK (TCCS) — để khách chuyển tiếp cho trại |
 | video | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
 
 Ảnh 1–4 có logo An Nhung, dùng chung KiotViet + MXH: không số điện thoại, địa chỉ, website, mã QR (hotline nằm ở mô tả KiotViet và caption). Ảnh 5 không logo, không chữ An Nhung. Chân trang cả 5 ảnh: "✔ Hàng chính hãng từ công ty `{{NHA_SAN_XUAT}}`" / "Số đăng ký lưu hành: `{{SDK}}`" (không có SĐK thì bỏ dòng này); ảnh 1–4 thêm dòng "NPP Thú Y An Nhung · slogan".
@@ -26,3 +26,5 @@ Script:
 - `scripts/tao_video.py video.html --out <ra.mp4>` – chụp từng cảnh của mau_video.html, ghép video 1080 x 1920 ~35 giây (ảnh sản phẩm phóng to dần, công dụng hiện từng ý, chuyển cảnh mờ), chưa có nhạc
 
 Phụ thuộc: Pillow, playwright (+ `playwright install chromium`), qrcode, opencv-python-headless (quét QR), ffmpeg (video).
+
+Sản phẩm dinh dưỡng chỉ có tiêu chuẩn cơ sở: điền `{{NHAN_SDK}}` = "Tiêu chuẩn cơ sở", `{{NHAN_SDK_NGAN}}` = "TCCS", `{{SDK}}` = số TCCS (coi như SĐK, không hỏi lại).

@@ -13,7 +13,8 @@
     {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá thẻ <span class="sdk"> và chip SĐK.
   - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). Bỏ class nen-mau = nền nhạt (--kieu-nen nhat).
   - Dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - Tóm tắt: Công dụng 2–3 ý, Liều dùng 2–3 ý (chép đúng nhãn), mỗi ý ~25 ký tự; Ngừng thuốc, Bảo quản, Quy cách ở hàng cuối.
+  - Anh chốt 17/11 lần 7: giữ NSX + SĐK (hoặc TCCS), có Thành phần 2 dòng, Công dụng 2–3 ý, Liều dùng 2–3 ý (chép đúng nhãn),
+    mỗi ý ~25 ký tự; Ngừng thuốc, Bảo quản, Quy cách ở hàng cuối. Sản phẩm TCCS: {{NHAN_SDK}} = "Tiêu chuẩn cơ sở".
 -->
 <link rel="stylesheet" href="an_nhung_800.css">
 <style>
@@ -22,7 +23,7 @@
 </style>
 </head>
 <body class="nen-mau">
-<div class="khung trang">
+<div class="khung trang ba-o">
   <img class="nen" src="nen_vuong.png" alt="">
 
   <div class="dau">
@@ -32,6 +33,8 @@
   <div class="than">
     <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
     <div class="cot">
+      <div class="o tp"><h3><span class="ic">🧪</span>THÀNH PHẦN</h3>
+        <ul><li>{{TP_1}}</li><li>{{TP_2}}</li></ul></div>
       <div class="o cd"><h3><span class="ic">🛡</span>CÔNG DỤNG</h3>
         <ul><li>{{CD_1}}</li><li>{{CD_2}}</li><li>{{CD_3}}</li></ul></div>
       <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
@@ -49,7 +52,7 @@
 
   <!-- Chỉ thông tin nhà sản xuất. KHÔNG logo, tên, hotline, địa chỉ, website, slogan An Nhung -->
   <div class="chan">
-    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
+    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">{{NHAN_SDK}}: {{SDK}}</span></div>
   </div>
 </div>
 <script src="an_nhung_800.js"></script>
