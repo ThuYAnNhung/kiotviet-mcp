@@ -9,7 +9,8 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 | 3 | `assets/mau_mxh_3_thanh_phan_cong_dung.html` | Mạng xã hội — thành phần & công dụng |
 | 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — liều dùng + ô Đối tượng thu nhỏ, đường dùng, ngừng thuốc |
 | 5 | `assets/mau_mxh_5_tu_van.html` | Mạng xã hội — tư vấn sử dụng, quy cách, SĐK, bảo quản |
-| video | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
+| video 30 giây | `assets/mau_video_30s.html` + `kich_ban.json` | TikTok, Shorts, Reels — 0–3s hook câu hỏi giật nảy, 3–25s mỗi 3 giây đổi cảnh (có thể gắn clip quay thật), giọng đọc tiếng Việt + phụ đề chạy liên tục, 25–30s mời nhắn tin An Nhung |
+| video cũ | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
 
 Ảnh 2–5 chỉ có logo An Nhung: không số điện thoại, địa chỉ, website, mã QR. Chân trang cả 5 ảnh: "✔ Hàng chính hãng từ công ty `{{NHA_SAN_XUAT}}`" / "Số đăng ký lưu hành: `{{SDK}}`" (không có SĐK thì bỏ dòng này); ảnh MXH thêm dòng "NPP Thú Y An Nhung · slogan".
 
@@ -21,6 +22,7 @@ Script:
 - `scripts/lay_mau_bao_bi.py <anh_san_pham.png> --html <các file>` – lấy màu chủ đạo + 4 màu ô từ bao bì, điền cho cả bộ
 - `scripts/tao_nen_chim.py` – nền màu bao bì + biểu tượng chìm con vật, mầm bệnh (mặc định 1536 x 2731, kiểu nền "mau")
 - `scripts/xuat_anh_kiotviet.py <file.html> <ra.jpg>` – chụp 2,5x, thu về 2160 x 3840, JPG 4:4:4 chất lượng cao nhất trong 1,5–1,9 MB + bản xem thử điện thoại; báo chữ tràn, chân trang bị cắt, ảnh sản phẩm gốc quá nhỏ so với chỗ hiển thị, chỗ `{{...}}` chưa điền, ảnh MXH lỡ có liên hệ; ảnh có QR thì quét lại
+- `scripts/tao_video_30s.py kich_ban.json --out <ra.mp4>` – video 30 giây có giọng đọc (Piper vi_VN-vais1000-medium qua `sherpa-onnx==1.13.8`, tự tải về ~/.cache/annhung-tts) và phụ đề, ra kèm file .srt. Cảnh nào có `"clip"` thì dùng video quay thật làm nền.
 - `scripts/tao_video.py video.html --out <ra.mp4>` – chụp từng cảnh của mau_video.html, ghép video 1080 x 1920 ~35 giây (ảnh sản phẩm phóng to dần, công dụng hiện từng ý, chuyển cảnh mờ), chưa có nhạc
 
 Phụ thuộc: Pillow, playwright (+ `playwright install chromium`), qrcode, opencv-python-headless (quét QR), ffmpeg (video).
