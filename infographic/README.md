@@ -9,6 +9,7 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 | 3 | `assets/mau_mxh_3_thanh_phan_cong_dung.html` | Mạng xã hội — thành phần & công dụng |
 | 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — liều dùng + ô Đối tượng thu nhỏ, đường dùng, ngừng thuốc |
 | 5 | `assets/mau_mxh_5_tu_van.html` | Mạng xã hội — tư vấn sử dụng, quy cách, SĐK, bảo quản |
+| ảnh vuông KiotViet | `assets/mau_kiotviet_vuong.html` | KiotViet tự thu mọi ảnh về cạnh dài 600 px (ảnh dọc 9:16 bị ép 338x600, chữ nát) → ảnh vuông 600/800/1080, chai to + tên + 3 ý chữ to + chân trang chính hãng/hotline. Xuất: `scripts/xuat_anh_vuong.py kv.html <ten>_kiotviet --co 600 800 1080` |
 | video 30 giây | `assets/mau_video_30s.html` + `kich_ban.json` | TikTok, Shorts, Reels — 0–3s hook câu hỏi giật nảy, 3–25s mỗi 3 giây đổi cảnh (có thể gắn clip quay thật), giọng đọc tiếng Việt + phụ đề chạy liên tục, 25–30s mời nhắn tin An Nhung |
 | video cũ | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
 

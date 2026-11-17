@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!--
+  ẢNH VUÔNG CHO KIOTVIET (anh chốt 17/11/2026): KiotViet tự thu mọi ảnh sản phẩm về cạnh dài 600 px,
+  ảnh dọc 9:16 bị ép còn 338 x 600 nên chữ nát. Ảnh vuông giữ được 600 x 600 (rộng gần gấp đôi).
+  Bố cục dựng trên khung 1080 x 1080, xuất 600 / 800 / 1080 bằng scripts/xuat_anh_vuong.py.
+  Ít chữ, chữ to: tên + dòng phụ + tối đa 3 ý ngắn (≤ 26 ký tự mỗi ý). Chi tiết để ở phần mô tả KiotViet.
+  Điền: {{TIEU_DE}} {{PHU_DE}} {{ANH_SAN_PHAM}} {{Y_1..3}} {{ICON_1..3}} {{NHA_SAN_XUAT}} {{SDK}}
+-->
+<link rel="stylesheet" href="an_nhung.css">
+<style>
+  :root { --mau: #BB3E8C; --mau-dam: #7A295B; --o1: #AC3981; --o2: #C2571A; --o3: #4B5AC3; }
+  html, body { margin: 0; width: 1080px; height: 1080px; overflow: hidden; }
+  body { position: relative; font-family: "Be Vietnam Pro", sans-serif;
+         background: radial-gradient(circle at 30% 60%, color-mix(in srgb, var(--mau) 70%, white) 0%, var(--mau) 45%, var(--mau-dam) 100%); }
+  .chim { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+  .logo { position: absolute; left: 34px; top: 30px; width: 270px; background: #fff; border-radius: 22px; padding: 12px 18px;
+          box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+  .logo img { width: 100%; display: block; }
+  h1 { position: absolute; left: 330px; right: 30px; top: 22px; margin: 0; font-family: "Anton", sans-serif; font-weight: 400;
+       font-size: 92px; line-height: 1.02; color: #fff; text-align: center; text-shadow: 0 5px 0 var(--mau-dam), 0 10px 24px rgba(0,0,0,.4); }
+  .phu { position: absolute; left: 50%; transform: translateX(-50%); top: 158px; white-space: nowrap; background: #fff; color: var(--mau-dam);
+         font-weight: 800; font-size: 50px; padding: 8px 36px; border-radius: 60px; box-shadow: 0 6px 18px rgba(0,0,0,.2); }
+  .vung-sp { position: absolute; left: 10px; top: 250px; width: 470px; height: 640px; }
+  .quang { position: absolute; left: 50%; top: 46%; width: 560px; height: 560px; transform: translate(-50%, -50%); border-radius: 50%;
+           background: radial-gradient(circle, rgba(255,255,255,.85), rgba(255,255,255,0) 66%); }
+  .buc { position: absolute; left: 50%; bottom: 6px; width: 400px; height: 70px; transform: translateX(-50%); border-radius: 50%;
+         background: radial-gradient(ellipse at 50% 40%, #fff 0%, #f1e9ef 60%, rgba(255,255,255,0) 72%); }
+  .vung-sp img { position: absolute; left: 50%; bottom: 36px; transform: translateX(-50%); max-width: 440px; max-height: 590px;
+                 filter: drop-shadow(0 22px 26px rgba(0,0,0,.35)); }
+  .y { position: absolute; left: 490px; right: 34px; top: 270px; display: flex; flex-direction: column; gap: 26px; }
+  .y div { background: #fff; border-radius: 26px; padding: 24px 18px 24px 18px; display: flex; align-items: center; gap: 14px;
+           font-size: 44px; font-weight: 800; line-height: 1.15; color: #2a1424; box-shadow: 0 8px 22px rgba(0,0,0,.2);
+           border-left: 14px solid var(--o1); }
+  .y div:nth-child(2) { border-left-color: var(--o2); }
+  .y div:nth-child(3) { border-left-color: var(--o3); }
+  .y i { font-family: "Noto Emoji"; font-style: normal; font-size: 50px; color: var(--o1); flex: none; }
+  .y div:nth-child(2) i { color: var(--o2); }
+  .y div:nth-child(3) i { color: var(--o3); }
+  .chan { position: absolute; left: 0; right: 0; bottom: 0; height: 172px; background: rgba(28,10,24,.9); color: #fff; text-align: center;
+          display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+  .chan .a { font-size: 38px; font-weight: 700; }
+  .chan .b { font-size: 38px; font-weight: 700; color: #FFE14D; }
+  .chan .c { font-size: 44px; font-weight: 800; }
+  .chan .c span { color: #FFE14D; }
+</style>
+</head>
+<body>
+<img class="chim" src="nen_chim.png" alt="">
+<div class="logo"><img src="logo_annhung.png" alt="An Nhung"></div>
+<h1>{{TIEU_DE}}</h1>
+<div class="phu">{{PHU_DE}}</div>
+<div class="vung-sp"><div class="quang"></div><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
+<div class="y">
+  <div><i>{{ICON_1}}</i>{{Y_1}}</div>
+  <div><i>{{ICON_2}}</i>{{Y_2}}</div>
+  <div><i>{{ICON_3}}</i>{{Y_3}}</div>
+</div>
+<div class="chan">
+  <div class="a">✔ Chính hãng {{NHA_SAN_XUAT}}</div>
+  <div class="b">Số đăng ký lưu hành: {{SDK}}</div>
+  <div class="c">Hotline <span>0988 370 387</span> · thuyannhung.com</div>
+</div>
+</body>
+</html>
