@@ -6,8 +6,10 @@
   ẢNH 1 – ĐẦY ĐỦ THÔNG TIN (KiotViet, gửi khách Zalo, website): 4 ô lưới 2 cột + dải nhỏ + chân trang đầy đủ có QR.
   Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
-  - {{CAM_KET}}: câu cam kết chính hãng viết riêng cho từng sản phẩm, bắt đầu bằng "✔", tối đa ~55 ký tự,
-    không ghi "ủy quyền"; "có số đăng ký lưu hành" chỉ ghi khi có SĐK thật.
+  - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
+    Trung ương NAVETCO"); {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá cả thẻ <span class="sdk">.
+  - Nền: <body class="nen-mau"> = nền là màu chủ đạo bao bì (tao_nen_chim.py --kieu-nen mau);
+    bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
   - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
   - Mỗi ô tối đa 3 ý, mỗi ý tối đa ~20 ký tự (4–5 từ) để không xuống dòng.
   - Ô Đối tượng: mỗi loài một <div class="loai"> với ký tự Noto Emoji (🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
@@ -18,7 +20,7 @@
           --o-tp: {{MAU_O1}}; --o-dt: {{MAU_O2}}; --o-cd: {{MAU_O3}}; --o-ld: {{MAU_O4}}; }
 </style>
 </head>
-<body>
+<body class="nen-mau">
 <div class="khung">
   <img class="nen" src="nen_chim.png" alt="">
 
@@ -51,7 +53,7 @@
 
   <!-- Ảnh 1 đầy đủ: thông tin An Nhung + mã QR website (qr_web.png do chuan_bi.py tạo) -->
   <div class="chan">
-    <div class="cam-ket">{{CAM_KET}}</div>
+    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
     <div class="hang">
       <div class="tt">
         <div class="ten-npp">NPP THÚ Y AN NHUNG</div>

@@ -10,14 +10,16 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 | 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — đối tượng & liều dùng |
 | 5 | `assets/mau_mxh_5_tu_van.html` | Mạng xã hội — tư vấn sử dụng, quy cách, SĐK, bảo quản |
 
-Ảnh 2–5 chỉ có logo An Nhung: không số điện thoại, địa chỉ, website, mã QR. Cả 5 ảnh có câu cam kết chính hãng `{{CAM_KET}}` ở chân trang.
+Ảnh 2–5 chỉ có logo An Nhung: không số điện thoại, địa chỉ, website, mã QR. Chân trang cả 5 ảnh: "✔ Hàng chính hãng từ công ty `{{NHA_SAN_XUAT}}`" / "Số đăng ký lưu hành: `{{SDK}}`" (không có SĐK thì bỏ dòng này); ảnh MXH thêm dòng "NPP Thú Y An Nhung · slogan".
+
+Nền mặc định là màu chính của bao bì (`<body class="nen-mau">` + `tao_nen_chim.py --kieu-nen mau --mau-dam <MAU_DAM>`): chữ tiêu đề trắng, logo trên thẻ trắng, quầng sáng trắng sau sản phẩm để sản phẩm không chìm. Bỏ class `nen-mau` + `--kieu-nen nhat` để dùng nền nhạt. Ảnh 2 (bìa) phóng to ảnh sản phẩm lấp khoảng trống.
 Kiểu chữ, cỡ chữ (tiêu đề 168 px, chữ trong ô 56 px), màu ô, chân trang nằm chung trong `assets/an_nhung.css`.
 
 Script:
 - `scripts/chuan_bi.py <thu_muc>` – tải font + logo, chép `an_nhung.css` + 5 mẫu, tạo `qr_web.png` (https://www.thuyannhung.com)
 - `scripts/lay_mau_bao_bi.py <anh_san_pham.png> --html <các file>` – lấy màu chủ đạo + 4 màu ô từ bao bì, điền cho cả bộ
-- `scripts/tao_nen_chim.py` – nền chìm con vật + mầm bệnh (mặc định 1536 x 2731)
-- `scripts/xuat_anh_kiotviet.py <file.html> <ra.jpg>` – chụp 2x, JPG 4:4:4 dưới 1,8 MB + bản xem thử điện thoại; báo chữ tràn, chân trang bị cắt, chỗ `{{...}}` chưa điền, ảnh MXH lỡ có liên hệ; ảnh có QR thì quét lại
+- `scripts/tao_nen_chim.py` – nền màu bao bì + biểu tượng chìm con vật, mầm bệnh (mặc định 1536 x 2731, kiểu nền "mau")
+- `scripts/xuat_anh_kiotviet.py <file.html> <ra.jpg>` – chụp 2x, JPG 4:4:4 dưới 1,8 MB + bản xem thử điện thoại; báo chữ tràn, chân trang bị cắt, ảnh sản phẩm gốc quá nhỏ so với chỗ hiển thị, chỗ `{{...}}` chưa điền, ảnh MXH lỡ có liên hệ; ảnh có QR thì quét lại
 - `scripts/tao_video.py <ảnh 2..5> --out <ra.mp4>` – video trình chiếu 1080 x 1920, ~16,5 giây, chưa có nhạc
 
 Phụ thuộc: Pillow, playwright (+ `playwright install chromium`), qrcode, opencv-python-headless (quét QR), ffmpeg (video).

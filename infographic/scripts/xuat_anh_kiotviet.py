@@ -50,6 +50,9 @@ def chup(html, w, h, scale):
             if (td && td.clientHeight > 270) loi.push('tieu-de dài quá 2 dòng: ' + td.innerText.slice(0, 40));
             const sp = document.querySelector('.san-pham');
             if (sp && sp.clientHeight < 400) loi.push('vùng ảnh sản phẩm còn quá thấp (' + sp.clientHeight + 'px)');
+            const im = document.querySelector('.san-pham img');
+            if (im && im.naturalHeight && im.naturalHeight < im.clientHeight * 1.3)
+              loi.push('ảnh sản phẩm gốc chỉ cao ' + im.naturalHeight + 'px mà hiển thị ' + im.clientHeight + 'px: phóng to sẽ mờ, xin anh ảnh chụp rõ hơn');
             const chan = document.querySelector('.chan');
             if (chan && chan.getBoundingClientRect().bottom > window.innerHeight + 1)
               loi.push('chân trang bị cắt ở mép dưới (' + Math.round(chan.getBoundingClientRect().bottom) + 'px > ' + window.innerHeight + 'px) — rút gọn nội dung ô');
@@ -63,7 +66,7 @@ def chup(html, w, h, scale):
     if font_thieu:
         print(f"CẢNH BÁO: font chưa nạp: {font_thieu} — chạy lại chuan_bi.py.")
     if tran:
-        print("CẢNH BÁO: chữ bị tràn khung, cần rút gọn hoặc giảm cỡ chữ:\n  " + "\n  ".join(tran))
+        print("CẢNH BÁO bố cục (chữ tràn ô, chân trang bị cắt, ảnh sản phẩm quá nhỏ...):\n  " + "\n  ".join(tran))
     if "{{" in chu:
         print("CẢNH BÁO: còn chỗ {{...}} chưa điền nội dung.")
     if not co_qr and any(x in chu for x in ("0988", "370 387", "thuyannhung.com", "Tô Hiệu")):
