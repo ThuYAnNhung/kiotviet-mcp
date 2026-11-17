@@ -4,10 +4,10 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 
 | Ảnh | Mẫu | Dùng ở đâu |
 |---|---|---|
-| 1 | `assets/mau_infographic.html` | KiotViet, gửi khách Zalo, website — chân trang đầy đủ: địa chỉ, hotline, website, mã QR |
+| 1 | `assets/mau_infographic.html` | KiotViet, gửi khách Zalo, website — 3 ô chủ đạo Thành phần / Công dụng / Liều dùng tự xếp (ý ngắn: 2 cột + Liều dùng ngang; ý dài: 3 hàng ngang), ô Đối tượng thu nhỏ góc dưới trái, chân trang đầy đủ (không QR, tự thu gọn khi nhiều chữ) |
 | 2 | `assets/mau_mxh_2_bia.html` | Mạng xã hội — bìa, ảnh sản phẩm lớn + 3 điểm nổi bật |
 | 3 | `assets/mau_mxh_3_thanh_phan_cong_dung.html` | Mạng xã hội — thành phần & công dụng |
-| 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — đối tượng & liều dùng |
+| 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — liều dùng + ô Đối tượng thu nhỏ, đường dùng, ngừng thuốc |
 | 5 | `assets/mau_mxh_5_tu_van.html` | Mạng xã hội — tư vấn sử dụng, quy cách, SĐK, bảo quản |
 | video | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
 
@@ -17,7 +17,7 @@ Nền mặc định là màu chính của bao bì (`<body class="nen-mau">` + `t
 Kiểu chữ, cỡ chữ (tiêu đề 168 px, chữ trong ô 56 px), màu ô, chân trang nằm chung trong `assets/an_nhung.css`.
 
 Script:
-- `scripts/chuan_bi.py <thu_muc>` – tải font + logo, chép `an_nhung.css` + 5 mẫu, tạo `qr_web.png` (https://www.thuyannhung.com)
+- `scripts/chuan_bi.py <thu_muc>` – tải font + logo, chép `an_nhung.css` + 5 mẫu, (không còn mã QR)
 - `scripts/lay_mau_bao_bi.py <anh_san_pham.png> --html <các file>` – lấy màu chủ đạo + 4 màu ô từ bao bì, điền cho cả bộ
 - `scripts/tao_nen_chim.py` – nền màu bao bì + biểu tượng chìm con vật, mầm bệnh (mặc định 1536 x 2731, kiểu nền "mau")
 - `scripts/xuat_anh_kiotviet.py <file.html> <ra.jpg>` – chụp 2,5x, thu về 2160 x 3840, JPG 4:4:4 chất lượng cao nhất trong 1,5–1,9 MB + bản xem thử điện thoại; báo chữ tràn, chân trang bị cắt, ảnh sản phẩm gốc quá nhỏ so với chỗ hiển thị, chỗ `{{...}}` chưa điền, ảnh MXH lỡ có liên hệ; ảnh có QR thì quét lại

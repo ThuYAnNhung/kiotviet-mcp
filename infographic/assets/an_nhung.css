@@ -95,3 +95,33 @@ body { font-family: "Be Vietnam Pro", sans-serif; color: var(--chu);
 .chan .so { color: #FFE27A; font-weight: 800; }
 .chan .tt .slogan { text-align: left; margin-top: 6px; }
 .chan .qr { width: 250px; height: 250px; border-radius: 14px; background: #fff; padding: 8px; }
+
+/* ẢNH 1 – 3 ô chủ đạo (Thành phần, Công dụng, Liều dùng), anh chốt 17/11 */
+.luoi3 { display: grid; gap: 24px; padding: 20px var(--le) 0; flex: none; }
+.luoi3 .o { height: auto; }
+.luoi3.bo-doc { grid-template-columns: 1fr 1fr; }          /* ý ngắn: TP | CD thành 2 cột dọc */
+.luoi3.bo-doc .ld { grid-column: 1 / -1; }                  /* Liều dùng nằm ngang bên dưới */
+.luoi3.bo-doc .ld ul { columns: 2; column-gap: 40px; }
+.luoi3.bo-ngang { grid-template-columns: 1fr; }             /* ý dài: 3 hàng ngang rộng hết khung */
+
+/* Hàng cuối: ô Đối tượng thu nhỏ ở góc trái + Quy cách / SĐK / Ngừng thuốc, tự xuống hàng gọn */
+.hang-cuoi { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 16px; padding: 22px var(--le) 0; flex: none; }
+.hang-cuoi .dai { display: contents; }
+.hang-cuoi .dai span { font-size: 44px; padding: 8px 18px; }
+.dt-nho { background: #fff; border-radius: 20px; padding: 6px 20px; border-left: 10px solid var(--o-dt);
+          display: flex; align-items: center; gap: 14px; font-size: 44px; font-weight: 700;
+          box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+.dt-nho b { color: var(--o-dt); font-weight: 800; }
+.dt-nho i { font-style: normal; font-family: "Noto Emoji"; font-size: 58px; color: var(--o-dt); margin-right: 6px; }
+
+/* Chân trang ảnh 1 (không QR) */
+.chan.day-du { text-align: center; }
+.chan.day-du .ten-npp { margin-top: 12px; }
+.gon-them { display: none; }
+/* Thu gọn khi 3 ô nhiều thông tin: chữ nhỏ hơn, 4 dòng, nhường chỗ cho ảnh sản phẩm */
+.chan-gon .chan { padding: 10px 40px 14px; margin-top: 16px; }
+.chan-gon .chan .cam-ket { font-size: 36px; padding: 6px 14px; }
+.chan-gon .chan .ten-npp { font-size: 38px; margin-top: 8px; }
+.chan-gon .chan .dong { font-size: 34px; margin-top: 2px; }
+.chan-gon .gon-them { display: inline; }
+.chan-gon .khong-gon { display: none; }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 1 – ĐẦY ĐỦ THÔNG TIN (KiotViet, gửi khách Zalo, website): 4 ô lưới 2 cột + dải nhỏ + chân trang đầy đủ có QR.
+  ẢNH 1 – ĐẦY ĐỦ THÔNG TIN (KiotViet, gửi khách Zalo, website): 3 ô chủ đạo tự xếp + ô Đối tượng nhỏ + chân trang đầy đủ (không QR).
   Khung 9:16, 1536 x 2731 px. Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung.css (không sửa cỡ chữ).
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
   - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
@@ -11,8 +11,13 @@
   - Nền: <body class="nen-mau"> = nền là màu chủ đạo bao bì (tao_nen_chim.py --kieu-nen mau);
     bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
   - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - Mỗi ô tối đa 3 ý, mỗi ý tối đa ~20 ký tự (4–5 từ) để không xuống dòng.
-  - Ô Đối tượng: mỗi loài một <div class="loai"> với ký tự Noto Emoji (🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
+  - 3 ô chủ đạo: Thành phần, Công dụng, Liều dùng (anh chốt 17/11). Script cuối trang tự xếp:
+      ý ngắn (≤ 22 ký tự) → Thành phần | Công dụng thành 2 cột dọc, Liều dùng nằm ngang bên dưới;
+      ý dài (nhiều ký tự)  → 3 ô xếp thành 3 hàng ngang rộng hết khung.
+    Ô Đối tượng thu nhỏ ở góc dưới cùng bên trái. Khi 3 ô nhiều thông tin làm ảnh sản phẩm còn thấp,
+    chân trang tự thu gọn (chữ nhỏ hơn, gộp dòng) để nhường chỗ cho sản phẩm.
+  - Đối tượng: mỗi loài một <span class="loai-nho"><i>emoji</i>Tên</span> (Noto Emoji 🐖 🐄 🐃 🐐 🐑 🐔 🦆 🐕 🐈 🐇 🐟 🦐 🐎).
+  - Không có mã QR (anh bỏ 17/11).
 -->
 <link rel="stylesheet" href="an_nhung.css">
 <style>
@@ -31,39 +36,45 @@
 
   <div class="san-pham"><div class="buc"></div><img src="{{ANH_SAN_PHAM}}" alt=""></div>
 
-  <div class="luoi">
+  <!-- 3 ô chủ đạo; class bo-doc / bo-ngang do script cuối trang tự chọn -->
+  <div class="luoi3">
     <div class="o tp"><h3><span class="ic">🧪</span>THÀNH PHẦN</h3>
       <ul><li>{{TP_1}}</li><li>{{TP_2}}</li><li>{{TP_3}}</li></ul></div>
-    <div class="o dt"><h3><span class="ic">🐾</span>ĐỐI TƯỢNG</h3>
-      <div class="loai-ds">
-        <div class="loai"><div class="hinh">{{EMOJI_LOAI_1}}</div><div class="ten">{{TEN_LOAI_1}}</div></div>
-        <div class="loai"><div class="hinh">{{EMOJI_LOAI_2}}</div><div class="ten">{{TEN_LOAI_2}}</div></div>
-      </div></div>
     <div class="o cd"><h3><span class="ic">🛡</span>CÔNG DỤNG</h3>
       <ul><li>{{CD_1}}</li><li>{{CD_2}}</li><li>{{CD_3}}</li></ul></div>
     <div class="o ld"><h3><span class="ic">💉</span>LIỀU DÙNG</h3>
       <ul><li>{{LD_1}}</li><li>{{LD_2}}</li><li>{{LD_3}}</li></ul></div>
   </div>
 
-  <div class="dai">
-    <span><b>Quy cách:</b> {{QUY_CACH}}</span>
-    <span><b>SĐK:</b> {{SDK}}</span>
-    <span><b>Ngừng thuốc:</b> {{NGUNG_THUOC}}</span>
-  </div>
-
-  <!-- Ảnh 1 đầy đủ: thông tin An Nhung + mã QR website (qr_web.png do chuan_bi.py tạo) -->
-  <div class="chan">
-    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
-    <div class="hang">
-      <div class="tt">
-        <div class="ten-npp">NPP THÚ Y AN NHUNG</div>
-        <div class="dong">21 Tô Hiệu, TP. Buôn Ma Thuột, Đắk Lắk</div>
-        <div class="dong">Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</div>
-        <div class="slogan">Xây dựng niềm tin – Khẳng định thương hiệu</div>
-      </div>
-      <img class="qr" src="qr_web.png" alt="QR thuyannhung.com">
+  <!-- Hàng cuối: ô Đối tượng thu nhỏ ở góc trái + Quy cách / SĐK (Ngừng thuốc chỉ ghi ở ảnh MXH, anh chốt 17/11) -->
+  <div class="hang-cuoi">
+    <div class="dt-nho"><b>🐾 Dùng cho</b>
+      <span class="loai-nho"><i>{{EMOJI_LOAI_1}}</i>{{TEN_LOAI_1}}</span>
+      <span class="loai-nho"><i>{{EMOJI_LOAI_2}}</i>{{TEN_LOAI_2}}</span>
+    </div>
+    <div class="dai">
+      <span><b>Quy cách:</b> {{QUY_CACH}}</span>
+      <span><b>SĐK:</b> {{SDK}}</span>
     </div>
   </div>
+
+  <!-- Ảnh 1 đầy đủ: thông tin An Nhung, không mã QR. Khi thu gọn (body.chan-gon) còn 4 dòng. -->
+  <div class="chan day-du">
+    <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
+    <div class="ten-npp">NPP THÚ Y AN NHUNG<span class="gon-them"> · Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</span></div>
+    <div class="dong">21 Tô Hiệu, TP. Buôn Ma Thuột, Đắk Lắk<span class="gon-them"> · Xây dựng niềm tin – Khẳng định thương hiệu</span></div>
+    <div class="dong khong-gon">Hotline <span class="so">0988 370 387</span> · www.thuyannhung.com</div>
+    <div class="slogan khong-gon">Xây dựng niềm tin – Khẳng định thương hiệu</div>
+  </div>
 </div>
+<script>
+  // Tự xếp 3 ô theo độ dài chữ, rồi thu gọn chân trang nếu ảnh sản phẩm bị ép thấp.
+  const ys = [...document.querySelectorAll('.luoi3 .tp li, .luoi3 .cd li')].map(li => li.innerText.trim().length);
+  const dai = ys.some(n => n > 22);
+  document.querySelector('.luoi3').classList.add(dai ? 'bo-ngang' : 'bo-doc');
+  const sp = document.querySelector('.san-pham'), chan = document.querySelector('.chan');
+  if (sp.clientHeight < 640 || chan.getBoundingClientRect().bottom > innerHeight)
+    document.body.classList.add('chan-gon');
+</script>
 </body>
 </html>

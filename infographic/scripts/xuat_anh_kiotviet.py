@@ -10,8 +10,7 @@ Làm gì:
    thiếu ảnh nào thì báo lỗi và dừng, không xuất ảnh hỏng.
 3. Thu về 4K dọc 2160 x 3840 bằng LANCZOS + làm nét nhẹ (anh chốt 17/11: ảnh 4K, 1,5–1,9 MB).
    Kiểm tra thêm: còn sót chỗ {{...}} chưa điền; chân trang bị cắt ở mép dưới
-   (khung có overflow hidden nên không tự báo); ảnh MXH (không có QR) lỡ chứa
-   hotline/website; ảnh có QR thì quét lại xem có ra đúng website không.
+   (khung có overflow hidden nên không tự báo); ảnh MXH lỡ chứa hotline/website.
 4. Lưu JPG chroma 4:4:4 (giữ viền chữ màu sắc nét; JPG mặc định 4:2:0 làm nhoè chữ đỏ/xanh),
    chọn chất lượng CAO NHẤT mà file vẫn ≤ --max-mb (1,9 MB) để up thẳng KiotViet/MXH không cần nén lại.
    Ảnh quá ít chi tiết mà chất lượng tối đa vẫn dưới --min-mb (1,5 MB) thì giữ chất lượng tối đa
@@ -60,6 +59,7 @@ def chup(html, w, h, scale, he_so_ra):
               loi.push('chân trang bị cắt ở mép dưới (' + Math.round(chan.getBoundingClientRect().bottom) + 'px > ' + window.innerHeight + 'px) — rút gọn nội dung ô');
             return loi; }""")
         chu = pg.evaluate("() => document.body.innerText")
+        day_du = pg.evaluate("() => !!document.querySelector('.chan.day-du, img.qr')")
         co_qr = pg.evaluate("() => !!document.querySelector('img.qr')")
         png = pg.screenshot(clip={"x": 0, "y": 0, "width": w, "height": h})
         b.close()
@@ -71,7 +71,7 @@ def chup(html, w, h, scale, he_so_ra):
         print("CẢNH BÁO bố cục (chữ tràn ô, chân trang bị cắt, ảnh sản phẩm quá nhỏ...):\n  " + "\n  ".join(tran))
     if "{{" in chu:
         print("CẢNH BÁO: còn chỗ {{...}} chưa điền nội dung.")
-    if not co_qr and any(x in chu for x in ("0988", "370 387", "thuyannhung.com", "Tô Hiệu")):
+    if not day_du and any(x in chu for x in ("0988", "370 387", "thuyannhung.com", "Tô Hiệu")):
         print("CẢNH BÁO: ảnh mạng xã hội không được có hotline, địa chỉ, website — xoá khỏi HTML.")
     return Image.open(io.BytesIO(png)).convert("RGB"), co_qr
 
