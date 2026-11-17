@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <!--
-  ẢNH 2 – MXH BÌA: ảnh sản phẩm lớn ở giữa + 3 điểm nổi bật dạng viên thuốc. Chỉ có logo, không liên hệ.
-  ẢNH VUÔNG 800 x 800 (anh chốt 17/11/2026). Bố cục dựng trên khung 1200 x 1200 px; xuat_anh_kiotviet.py chụp 2x rồi thu về 800 x 800.
-  Kiểu chữ, cỡ chữ, bố cục chung nằm trong an_nhung_800.css (không sửa cỡ chữ); an_nhung_800.js tự thu gọn khi nội dung nhiều.
+  ẢNH 1 – BÌA (có logo): ảnh sản phẩm lớn ở giữa + 3 nhãn nổi bật. Dùng làm ảnh đại diện KiotViet và ảnh đầu album MXH.
+  ẢNH VUÔNG 800 x 800 (anh chốt 17/11/2026). Khung bố cục 1200 x 1200; xuat_anh_kiotviet.py chụp 2x rồi thu về 800 x 800.
+  Mỗi ảnh một ý, ít chữ để chữ to (chữ trong ô ra ~27 px, tối thiểu 24 px): gửi Zalo phóng to không rỗ chữ.
+  Kiểu chữ, cỡ chữ nằm trong an_nhung_800.css (không sửa); an_nhung_800.js tự thu gọn khi nội dung nhiều.
   - {{MAU}}, {{MAU_DAM}}, {{MAU_O1}}..{{MAU_O4}}: chạy lay_mau_bao_bi.py <anh_san_pham> --html <các file> để tự điền.
-  - Chân trang chính hãng: {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn, ví dụ "CP Thuốc thú y
-    Trung ương NAVETCO"); {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá cả thẻ <span class="sdk">.
-  - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). <body class="nen-mau"> = nền màu chủ đạo bao bì;
-    bỏ class này = nền trắng pha nhạt màu bao bì (--kieu-nen nhat).
-  - Thay mọi {{...}} còn lại bằng nội dung thật; dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
-  - {{NB_1}}..{{NB_3}}: mỗi nhãn tối đa 4 từ, lấy từ công dụng/quy cách.
+  - {{NHA_SAN_XUAT}} = tên công ty sản xuất in trên nhãn (dài thì viết gọn: "Công ty Cổ phần" → "CP");
+    {{SDK}} = số đăng ký in trên sản phẩm. Không có SĐK (dụng cụ) thì xoá thẻ <span class="sdk"> và chip SĐK.
+  - Nền: nen_vuong.png (tao_nen_chim.py --w 1200 --h 1200 --scale 2). Bỏ class nen-mau = nền nhạt (--kieu-nen nhat).
+  - Dòng thừa thì xoá thẻ <li>/<span>. Thiếu thông tin thì xoá cả ô.
+  - {{NB_1}}..{{NB_3}}: mỗi nhãn tối đa 3–4 từ (bệnh chính, đối tượng, quy cách).
 -->
 <link rel="stylesheet" href="an_nhung_800.css">
 <style>
@@ -37,7 +37,7 @@
     <span>{{NB_1}}</span><span>{{NB_2}}</span><span>{{NB_3}}</span>
   </div>
 
-  <!-- Ảnh mạng xã hội: KHÔNG số điện thoại, địa chỉ, website, mã QR -->
+  <!-- Ảnh có logo dùng chung KiotViet + MXH: KHÔNG số điện thoại, địa chỉ, website, mã QR -->
   <div class="chan">
     <div class="cam-ket">✔ Hàng chính hãng từ công ty {{NHA_SAN_XUAT}}<span class="sdk">Số đăng ký lưu hành: {{SDK}}</span></div>
     <div class="slogan">NPP Thú Y An Nhung · Xây dựng niềm tin – Khẳng định thương hiệu</div>

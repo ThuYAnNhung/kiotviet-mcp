@@ -4,19 +4,19 @@ Bộ công cụ cho skill `mo-ta-va-infographic-thu-y`: mỗi sản phẩm dựn
 
 Ảnh vuông: bố cục khung 1200 x 1200 (`assets/an_nhung_800.css` + `assets/an_nhung_800.js` tự thu gọn khi nhiều chữ), logo + tên sản phẩm ở đầu, ảnh sản phẩm bên trái, ô thông tin bên phải, chụp 2x rồi thu về 800 x 800. Nền ảnh vuông là `nen_vuong.png`; video vẫn dùng `an_nhung.css` + `nen_chim.png`.
 
-| Ảnh | Mẫu | Dùng ở đâu |
+| Ảnh | Mẫu | Nội dung |
 |---|---|---|
-| 1 | `assets/mau_infographic.html` | KiotViet, gửi khách Zalo, website — sản phẩm trái, 3 ô Thành phần / Công dụng / Liều dùng xếp dọc bên phải, ô Đối tượng thu nhỏ góc dưới trái + Quy cách / SĐK, chân trang đầy đủ (không QR) |
-| 2 | `assets/mau_mxh_2_bia.html` | Mạng xã hội — bìa, ảnh sản phẩm lớn + 3 điểm nổi bật |
-| 3 | `assets/mau_mxh_3_thanh_phan_cong_dung.html` | Mạng xã hội — thành phần & công dụng |
-| 4 | `assets/mau_mxh_4_doi_tuong_lieu_dung.html` | Mạng xã hội — liều dùng + ô Đối tượng thu nhỏ, đường dùng, ngừng thuốc |
-| 5 | `assets/mau_mxh_5_tu_van.html` | Mạng xã hội — tư vấn sử dụng, quy cách, SĐK, bảo quản |
+| 1 | `assets/mau_1_bia.html` | Bìa (có logo): sản phẩm lớn + 3 nhãn nổi bật — ảnh đại diện KiotViet, ảnh đầu album MXH |
+| 2 | `assets/mau_2_cong_dung.html` | Công dụng (có logo): 3–5 bệnh/tác dụng + 1 dòng hoạt chất |
+| 3 | `assets/mau_3_cach_dung.html` | Cách dùng (có logo): liều theo loài + Dùng cho + Đường dùng + Ngừng thuốc |
+| 4 | `assets/mau_4_luu_y.html` | Lưu ý & bảo quản (có logo): 3–4 mẹo dùng + Quy cách / SĐK / Bảo quản |
+| 5 | `assets/mau_5_phieu_thong_tin.html` | Phiếu thông tin KHÔNG thương hiệu: không logo, không thông tin An Nhung, chỉ giữ NSX + SĐK — để khách chuyển tiếp cho trại |
 | video | `assets/mau_video.html` | TikTok, YouTube Shorts, Reels — mở bài (tên + slogan), thân bài (công dụng, dùng cho con gì, đường dùng), kết bài (nhắn tin, Follow, Like) |
 
-Ảnh 2–5 chỉ có logo An Nhung: không số điện thoại, địa chỉ, website, mã QR. Chân trang cả 5 ảnh: "✔ Hàng chính hãng từ công ty `{{NHA_SAN_XUAT}}`" / "Số đăng ký lưu hành: `{{SDK}}`" (không có SĐK thì bỏ dòng này); ảnh MXH thêm dòng "NPP Thú Y An Nhung · slogan".
+Ảnh 1–4 có logo An Nhung, dùng chung KiotViet + MXH: không số điện thoại, địa chỉ, website, mã QR (hotline nằm ở mô tả KiotViet và caption). Ảnh 5 không logo, không chữ An Nhung. Chân trang cả 5 ảnh: "✔ Hàng chính hãng từ công ty `{{NHA_SAN_XUAT}}`" / "Số đăng ký lưu hành: `{{SDK}}`" (không có SĐK thì bỏ dòng này); ảnh 1–4 thêm dòng "NPP Thú Y An Nhung · slogan".
 
-Nền mặc định là màu chính của bao bì (`<body class="nen-mau">` + `tao_nen_chim.py --kieu-nen mau --mau-dam <MAU_DAM>`): chữ tiêu đề trắng, logo trên thẻ trắng, quầng sáng trắng sau sản phẩm để sản phẩm không chìm. Bỏ class `nen-mau` + `--kieu-nen nhat` để dùng nền nhạt. Ảnh 2 (bìa) phóng to ảnh sản phẩm lấp khoảng trống.
-Kiểu chữ, cỡ chữ ảnh vuông (khung 1200: tiêu đề 76 px, chữ trong ô 30 px; ảnh ra bằng 2/3), màu ô, chân trang nằm chung trong `assets/an_nhung_800.css`.
+Nền mặc định là màu chính của bao bì (`<body class="nen-mau">` + `tao_nen_chim.py --kieu-nen mau --mau-dam <MAU_DAM>`): chữ tiêu đề trắng, logo trên thẻ trắng, quầng sáng trắng sau sản phẩm để sản phẩm không chìm. Bỏ class `nen-mau` + `--kieu-nen nhat` để dùng nền nhạt. Ảnh 1 (bìa) phóng to ảnh sản phẩm lấp khoảng trống.
+Mỗi ảnh một ý, ít chữ để chữ to (gửi Zalo phóng to không rỗ). Kiểu chữ, cỡ chữ ảnh vuông (khung 1200: tiêu đề 84 px, chữ trong ô 40 px, tối thiểu 36; ảnh ra bằng 2/3), màu ô, chân trang nằm chung trong `assets/an_nhung_800.css`.
 
 Script:
 - `scripts/chuan_bi.py <thu_muc>` – tải font + logo, chép `an_nhung_800.css`, `an_nhung_800.js`, `an_nhung.css` + 6 mẫu (không còn mã QR)

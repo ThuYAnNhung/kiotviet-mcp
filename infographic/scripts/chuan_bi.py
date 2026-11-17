@@ -8,11 +8,7 @@ Kết quả trong <thu_muc_lam_viec>:
     logo_annhung.png   (logo gốc nền trong, bản 1600px từ GitHub dự án)
     an_nhung_800.css + an_nhung_800.js + 5 mẫu ảnh vuông (khung 1200 x 1200, xuất ra 800 x 800),
     an_nhung.css cho video 9:16 (1080 x 1920):
-        mau_infographic.html                  ảnh 1 đầy đủ thông tin (KiotViet, Zalo, website)
-        mau_mxh_2_bia.html                    ảnh 2 MXH bìa
-        mau_mxh_3_thanh_phan_cong_dung.html   ảnh 3 MXH thành phần & công dụng
-        mau_mxh_4_doi_tuong_lieu_dung.html    ảnh 4 MXH đối tượng & liều dùng
-        mau_mxh_5_tu_van.html                 ảnh 5 MXH tư vấn sử dụng
+        mau_1_bia.html ... mau_5_phieu_thong_tin.html (xem README)
         mau_video.html                        video ~35 giây
     (Không còn mã QR trên ảnh — anh bỏ 17/11/2026; hàm tao_qr giữ lại nếu sau này cần.)
 

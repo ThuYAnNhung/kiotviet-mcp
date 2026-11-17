@@ -58,6 +58,8 @@ def chup(html, w, h, scale, he_so_ra):
             return loi; }""")
         chu = pg.evaluate("() => document.body.innerText")
         day_du = pg.evaluate("() => !!document.querySelector('.chan.day-du, img.qr')")
+        trang = pg.evaluate("() => !!document.querySelector('.trang')")
+        co_logo = pg.evaluate("() => !!document.querySelector('img.logo, img[src*=\"logo\"]')")
         co_qr = pg.evaluate("() => !!document.querySelector('img.qr')")
         png = pg.screenshot(clip={"x": 0, "y": 0, "width": w, "height": h})
         b.close()
@@ -70,7 +72,9 @@ def chup(html, w, h, scale, he_so_ra):
     if "{{" in chu:
         print("CẢNH BÁO: còn chỗ {{...}} chưa điền nội dung.")
     if not day_du and any(x in chu for x in ("0988", "370 387", "thuyannhung.com", "Tô Hiệu")):
-        print("CẢNH BÁO: ảnh mạng xã hội không được có hotline, địa chỉ, website — xoá khỏi HTML.")
+        print("CẢNH BÁO: ảnh không được có hotline, địa chỉ, website — xoá khỏi HTML.")
+    if trang and (co_logo or "an nhung" in chu.lower()):
+        print("CẢNH BÁO: ảnh 5 phiếu thông tin không thương hiệu không được có logo hay chữ An Nhung — xoá khỏi HTML.")
     return Image.open(io.BytesIO(png)).convert("RGB"), co_qr
 
 
