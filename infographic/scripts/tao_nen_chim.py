@@ -9,7 +9,10 @@ Tham số:
     --mam-benh   các nhóm mầm bệnh bị diệt trong CÔNG DỤNG (xem bảng MAM_BENH)
     --mau        màu chủ đạo lấy từ bao bì (mã hex)
     --do-dam     độ đậm biểu tượng chìm, mặc định 0.08 (0.06–0.12 là dễ nhìn)
-    --w --h      kích thước khung, mặc định 1536 x 2048
+    --kieu-nen   "mau" = nền chính là màu chủ đạo của bao bì (đậm ở trên/dưới, sáng dần ở giữa),
+                 biểu tượng chìm màu trắng; "nhat" = nền trắng pha nhạt màu chủ đạo, biểu tượng màu.
+    --mau-dam    màu đậm cùng tông (MAU_DAM do lay_mau_bao_bi.py in ra), dùng cho --kieu-nen mau
+    --w --h      kích thước khung, mặc định 1536 x 2731 (9:16)
     --scale      nhân độ phân giải, mặc định 2 (khớp với lúc chụp HTML ở 2x)
 
 Ảnh nền ra là nền sáng (trắng pha rất nhẹ màu chủ đạo) + biểu tượng dạng nét mảnh,
@@ -152,9 +155,11 @@ def main():
     p.add_argument("--out", required=True)
     p.add_argument("--do-dam", type=float, default=0.08)
     p.add_argument("--w", type=int, default=1536)
-    p.add_argument("--h", type=int, default=2048)
+    p.add_argument("--h", type=int, default=2731)
     p.add_argument("--scale", type=int, default=2)
     p.add_argument("--seed", type=int, default=3)
+    p.add_argument("--kieu-nen", choices=["mau", "nhat"], default="mau")
+    p.add_argument("--mau-dam", default="")
     a = p.parse_args()
 
     vat = [v.strip() for v in a.vat_nuoi.split(",") if v.strip()]
@@ -168,11 +173,22 @@ def main():
 
     W, H, S = a.w * a.scale, a.h * a.scale, a.scale
     r, g, b = hex_rgb(a.mau)
-    # nền: trắng pha 3% màu chủ đạo
-    nen = Image.new("RGBA", (W, H), (int(255 * 0.97 + r * 0.03), int(255 * 0.97 + g * 0.03), int(255 * 0.97 + b * 0.03), 255))
+    if a.kieu_nen == "mau":
+        # nền màu chủ đạo: dải dọc MAU_DAM (trên) -> MAU (giữa) -> MAU_DAM (dưới), biểu tượng trắng
+        rd, gd, bd = hex_rgb(a.mau_dam) if a.mau_dam else (int(r * 0.6), int(g * 0.6), int(b * 0.6))
+        cot_mau = Image.new("RGB", (1, H))
+        for y in range(H):
+            t = abs(y / (H - 1) - 0.45) / 0.55  # 0 ở giữa vùng sản phẩm, 1 ở mép
+            t = min(1.0, t) ** 1.4
+            cot_mau.putpixel((0, y), (int(r + (rd - r) * t), int(g + (gd - g) * t), int(b + (bd - b) * t)))
+        nen = cot_mau.resize((W, H)).convert("RGBA")
+        mau = (255, 255, 255, int(255 * a.do_dam))
+    else:
+        # nền nhạt: trắng pha 12% màu chủ đạo, biểu tượng cùng màu
+        nen = Image.new("RGBA", (W, H), (int(255 * 0.88 + r * 0.12), int(255 * 0.88 + g * 0.12), int(255 * 0.88 + b * 0.12), 255))
+        mau = (r, g, b, int(255 * a.do_dam))
     lop = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     rnd = random.Random(a.seed)
-    mau = (r, g, b, int(255 * a.do_dam))
 
     o = 250 * S  # bước lưới
     cot, hang = math.ceil(W / o) + 1, math.ceil(H / o) + 1
@@ -196,7 +212,7 @@ def main():
             lop.alpha_composite(ic, (max(0, px), max(0, py)))
     nen.alpha_composite(lop)
     nen.convert("RGB").save(a.out)
-    print(f"OK: nền chìm {W}x{H}px, {len(ds)} loại biểu tượng ({', '.join(m for _, m in ds)}), đậm {a.do_dam} -> {a.out}")
+    print(f"OK: nền chìm {W}x{H}px, {len(ds)} loại biểu tượng ({', '.join(m for _, m in ds)}), đậm {a.do_dam}, kiểu nền {a.kieu_nen} -> {a.out}")
 
 
 if __name__ == "__main__":
