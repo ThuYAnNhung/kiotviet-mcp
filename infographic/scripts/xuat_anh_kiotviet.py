@@ -96,7 +96,7 @@ def luu_jpg(im, out, max_mb, min_mb):
         buf = io.BytesIO()
         im.save(buf, "JPEG", quality=q, subsampling=0, optimize=True, progressive=True, dpi=(300, 300))
         return buf
-    gioi_han = max_mb * 1024 * 1024
+    gioi_han = max_mb * 1_000_000  # MB thập phân như KiotViet đếm (2 MB = 2.000.000 byte)
     thap, cao, tot = 75, 100, None
     while thap <= cao:
         q = (thap + cao) // 2
@@ -109,8 +109,8 @@ def luu_jpg(im, out, max_mb, min_mb):
         sys.exit("LỖI: chất lượng 75 vẫn quá giới hạn dung lượng. Giảm chi tiết nền (--do-dam) rồi xuất lại.")
     q, buf = tot
     open(out, "wb").write(buf.getvalue())
-    if buf.tell() < min_mb * 1024 * 1024:
-        print(f"Ghi chú: ảnh ít chi tiết, chất lượng tối đa {q} chỉ {buf.tell() / 1048576:.2f} MB (< {min_mb} MB) — đây đã là bản nét nhất.")
+    if buf.tell() < min_mb * 1_000_000:
+        print(f"Ghi chú: ảnh ít chi tiết, chất lượng tối đa {q} chỉ {buf.tell() / 1e6:.2f} MB (< {min_mb} MB) — đây đã là bản nét nhất.")
     return q, buf.tell()
 
 
@@ -134,7 +134,7 @@ def main():
     goc, _ = os.path.splitext(a.out)
     xem = goc + "_xem-thu-dien-thoai.jpg"
     anh.resize((540, round(540 * a.ra_h / a.ra_w)), Image.LANCZOS).save(xem, quality=90)
-    print(f"OK: {a.out} — {a.ra_w}x{a.ra_h}px, JPG chất lượng {q}, {size / 1024 / 1024:.2f} MB (mục tiêu {a.min_mb}–{a.max_mb} MB)")
+    print(f"OK: {a.out} — {a.ra_w}x{a.ra_h}px, JPG chất lượng {q}, {size / 1e6:.2f} MB (mục tiêu {a.min_mb}–{a.max_mb} MB)")
     print(f"Bản xem thử điện thoại: {xem}")
     if co_qr:
         kiem_qr(a.out)
